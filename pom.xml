@@ -37,12 +37,12 @@
 			<artifactId>spring-boot-starter</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-<!-- 		<dependency>
+ 		<dependency>
 			<groupId>com.github.lalyos</groupId>
 			<artifactId>jfiglet</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.3</version>
 		</dependency>
- -->	</dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -70,6 +70,14 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+	    <repository>
+		  <snapshots>
+			<enabled>false</enabled>
+		  </snapshots>
+		  <id>central</id>
+		  <name>bintray</name>
+		  <url>http://dl.bintray.com/lalyos/maven</url>
+	    </repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
