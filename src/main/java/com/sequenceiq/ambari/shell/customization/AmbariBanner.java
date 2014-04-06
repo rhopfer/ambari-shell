@@ -3,15 +3,17 @@ package com.sequenceiq.ambari.shell.customization;
 import org.springframework.shell.plugin.BannerProvider;
 import org.springframework.stereotype.Component;
 
+import com.github.lalyos.jfiglet.FigletFont;
+
 @Component
 public class AmbariBanner implements BannerProvider{
 
-	public String getProviderName() {		
-		return "---=== AmbariShell ===---";
+	public String getProviderName() {
+		return "AmbariShell";
 	}
 
 	public String getBanner() {
-		return null;
+		return FigletFont.convertOneLine("AmbariShell");
 	}
 
 	public String getVersion() {
@@ -19,7 +21,7 @@ public class AmbariBanner implements BannerProvider{
 	}
 
 	public String getWelcomeMessage() {
-		return "Welcome to Ambari Shell. For assistance press or type \"hint\" then hit ENTER.";
+		return "Welcome to Ambari Shell. For assistance press TAB";
 	}
 
 }
