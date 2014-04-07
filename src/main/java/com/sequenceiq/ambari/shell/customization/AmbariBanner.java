@@ -17,7 +17,7 @@ public class AmbariBanner implements BannerProvider{
 	}
 
 	public String getVersion() {
-		return "0.9";
+		return getClass().getPackage().getImplementationVersion();
 	}
 
 	public String getWelcomeMessage() {
