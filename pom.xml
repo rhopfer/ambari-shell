@@ -37,7 +37,7 @@
 			<artifactId>spring-boot-starter</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
- 		<dependency>
+		<dependency>
 			<groupId>com.github.lalyos</groupId>
 			<artifactId>jfiglet</artifactId>
 			<version>0.0.3</version>
@@ -51,25 +51,6 @@
 	</dependencies>
 
 	<build>
-	  <plugins>
-		<plugin>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-maven-plugin</artifactId>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-jar-plugin</artifactId>
-			<configuration>
-				<archive>
-					<manifest>
-						<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-					</manifest>
-				</archive>
-			</configuration>
-		</plugin>
-	  </plugins>
-    </build>
 		<extensions>
 			<extension>
 				<groupId>org.springframework.build</groupId>
@@ -77,6 +58,25 @@
 				<version>5.0.0.RELEASE</version>
 			</extension>
 		</extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<repositories>
 		<repository>
@@ -118,14 +118,14 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-	    <repository>
-		  <snapshots>
-			<enabled>false</enabled>
-		  </snapshots>
-		  <id>central</id>
-		  <name>bintray</name>
-		  <url>http://dl.bintray.com/lalyos/maven</url>
-	    </repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>bintray</name>
+			<url>http://dl.bintray.com/lalyos/maven</url>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
