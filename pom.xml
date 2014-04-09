@@ -10,6 +10,12 @@
 	<name>ambari-shell</name>
 	<url>http://maven.apache.org</url>
 
+	<scm>
+		<connection>scm:git:git://github.com/sequenceiq/ambari-rest-client.git</connection>
+		<developerConnection>scm:git:git@github.com:sequenceiq/ambari-rest-client.git</developerConnection>
+		<url>https://github.com/sequenceiq/ambari-rest-client</url>
+	</scm>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -60,6 +66,24 @@
 		</extensions>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<shortRevisionLength>6</shortRevisionLength>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
@@ -68,10 +92,9 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-						</manifest>
+						<manifestEntries>
+							<Implementation-Version>${project.version}-${buildNumber}</Implementation-Version>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
