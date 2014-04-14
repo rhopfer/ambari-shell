@@ -86,4 +86,16 @@ public class AmbariCommands implements CommandMarker {
 		return client.allServiceComponents();
 	}
 	
+	@CliAvailabilityIndicator({ "focus" })
+	public boolean isFocusCommandAvailable() {
+		return true;
+	}
+
+	@CliCommand(value = "focus", help = "sets focus to the specified Host")
+	public String focus(
+			@CliOption(key = { "host" }, mandatory = true, help = "hostname") String host
+			) {
+		context.setHost(host);
+		return "focus set to:" + host;
+	}
 }
