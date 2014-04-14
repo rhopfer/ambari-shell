@@ -108,4 +108,15 @@ public class AmbariCommands implements CommandMarker {
 	public String hostComponents() {		
 		return client.hostComponentList(context.getHost());
 	}
+	
+	@CliAvailabilityIndicator({ "blueprints" })
+	public boolean isblueprintsCommandAvailable() {
+		return true;
+	}
+
+	@CliCommand(value = "blueprints", help = "lists all known blueprint")
+	public String blueprints() {
+		return client.blueprintList();
+	}
+	
 }
