@@ -76,5 +76,14 @@ public class AmbariCommands implements CommandMarker {
 		return client.serviceList();
 	}
 
+	@CliAvailabilityIndicator({ "serviceComponents" })
+	public boolean isserviceComponentsCommandAvailable() {
+		return client != null;
+	}
+
+	@CliCommand(value = "serviceComponents", help = "lists all Services with their Components")
+	public String serviceComponents() {
+		return client.allServiceComponents();
+	}
 	
 }
