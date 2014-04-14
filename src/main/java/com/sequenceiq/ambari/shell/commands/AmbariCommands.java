@@ -119,4 +119,26 @@ public class AmbariCommands implements CommandMarker {
 		return client.blueprintList();
 	}
 	
+	@CliAvailabilityIndicator({ "debug on" })
+	public boolean isdebugOnCommandAvailable() {
+		return !client.isDebugEnabled();
+	}
+
+	@CliCommand(value = "debug on", help = "enables the display API url")
+	public String debugOn() {
+		client.setDebugEnabled(true);
+		return "debug enabled";
+	}
+	
+	@CliAvailabilityIndicator({ "debug off" })
+	public boolean isdebugOffCommandAvailable() {
+		return client.isDebugEnabled();
+	}
+
+	@CliCommand(value = "debug off", help = "disables API url display ")
+	public String debugOff() {
+		client.setDebugEnabled(false);
+		return "debug disabled";
+	}
+
 }
