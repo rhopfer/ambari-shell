@@ -1,5 +1,6 @@
 package com.sequenceiq.ambari.shell.commands;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
 import org.springframework.shell.core.annotation.CliCommand;
@@ -9,9 +10,12 @@ import org.springframework.stereotype.Component;
 import com.sequenceiq.ambari.client.AmbariClient;
 
 @Component
-public class ConnectCommands implements CommandMarker {
+public class AmbariCommands implements CommandMarker {
 	
 	private AmbariClient client = null;
+
+	@Autowired
+	private AmbariContext context;
 	
 	@CliAvailabilityIndicator({"connect"})
 	public boolean isConnectCommandAvailable() {
@@ -31,7 +35,8 @@ public class ConnectCommands implements CommandMarker {
 		  
 		try {
 			client = new AmbariClient(host, port, user, password);
-			return client.clusterList();
+			context.setCluster(client.getClusterName());
+			return "cluster:" + client.getClusterName() + "\n" + client.clusterList();
 		} catch (Exception e){
 			return "connection failure: " + e.getMessage();
 		}
@@ -71,4 +76,5 @@ public class ConnectCommands implements CommandMarker {
 		return client.serviceList();
 	}
 
+	
 }
