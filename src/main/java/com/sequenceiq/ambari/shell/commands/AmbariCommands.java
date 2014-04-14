@@ -98,4 +98,14 @@ public class AmbariCommands implements CommandMarker {
 		context.setHost(host);
 		return "focus set to:" + host;
 	}
+	
+	@CliAvailabilityIndicator({ "hostComponents" })
+	public boolean isHostComponentsCommandAvailable() {
+		return context.getHost() != null;
+	}
+
+	@CliCommand(value = "hostComponents", help = "list components assigned to the selected host")
+	public String hostComponents() {		
+		return client.hostComponentList(context.getHost());
+	}
 }
