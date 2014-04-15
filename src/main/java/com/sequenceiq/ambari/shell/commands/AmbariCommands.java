@@ -50,7 +50,7 @@ public class AmbariCommands implements CommandMarker {
 	
 	@CliCommand(value = "tasks", help = "Connects to an Ambari Server")
 	  public String tasks(
-			  @CliOption(key = { "id" }, mandatory = false, help = "id of the Task; default is: 1", unspecifiedDefaultValue="1")
+			  @CliOption(key = { "id" }, mandatory = false, help = "id of the Reuest; default is: 1", unspecifiedDefaultValue="1")
 			  String id
 	   ){
 		return client.taskList(id);
