@@ -34,95 +34,108 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShellConfiguration {
 
-	@Bean
-	HistoryFileNameProvider defaultHistoryFileNameProvider() {
-	  return new DefaultHistoryFileNameProvider();
-	}
+  @Bean
+  HistoryFileNameProvider defaultHistoryFileNameProvider() {
+    return new DefaultHistoryFileNameProvider();
+  }
 
-	//@Bean
-	PromptProvider defaultPromptProvider() {
-	  return new DefaultPromptProvider();
-	}
+  //@Bean
+  PromptProvider defaultPromptProvider() {
+    return new DefaultPromptProvider();
+  }
 
-	//@Bean
-	BannerProvider defaultBannerProvider() {
-	  return new DefaultBannerProvider();
-	}
+  //@Bean
+  BannerProvider defaultBannerProvider() {
+    return new DefaultBannerProvider();
+  }
 
-	@Bean(name="shell")
-	JLineShellComponent shell() {
-		return new JLineShellComponent();
-	}
-	
-	@Bean
-	CommandLine commandLine() throws Exception {
-	 return SimpleShellCommandLineOptions.parseCommandLine(null);
-	}
-	
-	@Bean
-	Converter SimpleFileConverter() {
-		return new SimpleFileConverter();
-	}	
+  @Bean(name = "shell")
+  JLineShellComponent shell() {
+    return new JLineShellComponent();
+  }
 
-	@Bean
-	Converter stringConverter() {
-		return new StringConverter();
-	}
-	
-	@Bean
-	Converter availableCommandsConverter() {
-		return new AvailableCommandsConverter();
-	}
-	@Bean
-	Converter bigDecimalConverter() {
-		return new BigDecimalConverter();
-	}
-	@Bean
-	Converter bigIntegerConverter() {
-		return new BigIntegerConverter();
-	}
-	@Bean
-	Converter booleanConverter() {
-		return new BooleanConverter();
-	}
-	@Bean
-	Converter characterConverter() {
-		return new CharacterConverter();
-	}
-	@Bean
-	Converter dateConverter() {
-		return new DateConverter();
-	}
-	@Bean
-	Converter doubleConverter() {
-		return new DoubleConverter();
-	}
-	@Bean
-	Converter enumConverter() {
-		return new EnumConverter();
-	}
-	@Bean
-	Converter floatConverter() {
-		return new FloatConverter();
-	}
-	@Bean
-	Converter integerConverter() {
-		return new IntegerConverter();
-	}
-	@Bean
-	Converter LocaleConverter() {
-		return new LocaleConverter();
-	}
-	@Bean
-	Converter longConverter() {
-		return new LongConverter();
-	}
-	@Bean
-	Converter shortConverter() {
-		return new ShortConverter();
-	}
-	@Bean
-	Converter StaticFieldConverterImpl() {
-		return new StaticFieldConverterImpl();
-	}
+  @Bean
+  CommandLine commandLine() throws Exception {
+    return SimpleShellCommandLineOptions.parseCommandLine(null);
+  }
+
+  @Bean
+  Converter SimpleFileConverter() {
+    return new SimpleFileConverter();
+  }
+
+  @Bean
+  Converter stringConverter() {
+    return new StringConverter();
+  }
+
+  @Bean
+  Converter availableCommandsConverter() {
+    return new AvailableCommandsConverter();
+  }
+
+  @Bean
+  Converter bigDecimalConverter() {
+    return new BigDecimalConverter();
+  }
+
+  @Bean
+  Converter bigIntegerConverter() {
+    return new BigIntegerConverter();
+  }
+
+  @Bean
+  Converter booleanConverter() {
+    return new BooleanConverter();
+  }
+
+  @Bean
+  Converter characterConverter() {
+    return new CharacterConverter();
+  }
+
+  @Bean
+  Converter dateConverter() {
+    return new DateConverter();
+  }
+
+  @Bean
+  Converter doubleConverter() {
+    return new DoubleConverter();
+  }
+
+  @Bean
+  Converter enumConverter() {
+    return new EnumConverter();
+  }
+
+  @Bean
+  Converter floatConverter() {
+    return new FloatConverter();
+  }
+
+  @Bean
+  Converter integerConverter() {
+    return new IntegerConverter();
+  }
+
+  @Bean
+  Converter LocaleConverter() {
+    return new LocaleConverter();
+  }
+
+  @Bean
+  Converter longConverter() {
+    return new LongConverter();
+  }
+
+  @Bean
+  Converter shortConverter() {
+    return new ShortConverter();
+  }
+
+  @Bean
+  Converter StaticFieldConverterImpl() {
+    return new StaticFieldConverterImpl();
+  }
 }

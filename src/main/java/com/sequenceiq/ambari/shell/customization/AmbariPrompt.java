@@ -7,17 +7,17 @@ import org.springframework.stereotype.Component;
 import com.sequenceiq.ambari.shell.commands.AmbariContext;
 
 @Component
-public class AmbariPrompt implements PromptProvider{
+public class AmbariPrompt implements PromptProvider {
 
-	@Autowired
-	AmbariContext context;
-	
-	public String getProviderName() {
-		return AmbariPrompt.class.getSimpleName();
-	}
+  @Autowired
+  AmbariContext context;
 
-	public String getPrompt() {
-		return context.getPrompt();
-	}
+  public String getProviderName() {
+    return AmbariPrompt.class.getSimpleName();
+  }
+
+  public String getPrompt() {
+    return context.getPrompt();
+  }
 
 }

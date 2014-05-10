@@ -18,6 +18,6 @@ public class HelloWorldCommands implements CommandMarker {
 
   @CliCommand(value = "hello", help = "Print a simple hello world message")
   public String simple() {
-	  return FileUtils.readBanner(AmbariShell.class, "banner.txt");
+    return FileUtils.readBanner(AmbariShell.class, "banner.txt");
   }
 }
