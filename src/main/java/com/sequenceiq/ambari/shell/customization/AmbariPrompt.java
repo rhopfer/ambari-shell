@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.plugin.PromptProvider;
 import org.springframework.stereotype.Component;
 
-import com.sequenceiq.ambari.shell.commands.AmbariContext;
+import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 @Component
 public class AmbariPrompt implements PromptProvider {

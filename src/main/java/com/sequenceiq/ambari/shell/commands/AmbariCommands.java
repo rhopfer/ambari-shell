@@ -8,14 +8,15 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 @Component
 public class AmbariCommands implements CommandMarker {
 
-  private AmbariClient client = null;
-
   @Autowired
   private AmbariContext context;
+
+  private AmbariClient client = null;
 
   @CliAvailabilityIndicator({"connect"})
   public boolean isConnectCommandAvailable() {
@@ -25,13 +26,13 @@ public class AmbariCommands implements CommandMarker {
   @CliCommand(value = "connect", help = "Connects to an Ambari Server")
   public String connect(
     @CliOption(key = {"host"}, mandatory = false, help = "Hostname of the Ambari Server; default is: 'localhost'", unspecifiedDefaultValue = "localhost")
-    final String host,
+    String host,
     @CliOption(key = {"port"}, mandatory = false, help = "Port number of the Ambari listens on; default is: '8080'", unspecifiedDefaultValue = "8080")
-    final String port,
+    String port,
     @CliOption(key = {"user"}, mandatory = false, help = "Username for authorization; default is: 'admin'", unspecifiedDefaultValue = "admin")
-    final String user,
+    String user,
     @CliOption(key = {"password"}, mandatory = false, help = "Password of the user; default is: 'admin'", unspecifiedDefaultValue = "admin")
-    final String password) {
+    String password) {
     try {
       client = new AmbariClient(host, port, user, password);
       context.setCluster(client.getClusterName());

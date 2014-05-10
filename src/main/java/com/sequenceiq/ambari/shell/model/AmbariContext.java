@@ -1,4 +1,4 @@
-package com.sequenceiq.ambari.shell.commands;
+package com.sequenceiq.ambari.shell.model;
 
 import org.springframework.stereotype.Component;
 
