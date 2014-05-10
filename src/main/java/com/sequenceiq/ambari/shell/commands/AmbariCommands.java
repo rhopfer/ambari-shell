@@ -23,36 +23,33 @@ public class AmbariCommands implements CommandMarker {
   }
 
   @CliCommand(value = "connect", help = "Connects to an Ambari Server")
-  public String conect(
-    @CliOption(key = {"host"}, mandatory = false, help = "Hostname of Ambari Server; default is: 'localhost'", unspecifiedDefaultValue = "localhost")
+  public String connect(
+    @CliOption(key = {"host"}, mandatory = false, help = "Hostname of the Ambari Server; default is: 'localhost'", unspecifiedDefaultValue = "localhost")
     final String host,
-    @CliOption(key = {"port"}, mandatory = false, help = "Port number Ambari listens on; default is: '8080'", unspecifiedDefaultValue = "8080")
+    @CliOption(key = {"port"}, mandatory = false, help = "Port number of the Ambari listens on; default is: '8080'", unspecifiedDefaultValue = "8080")
     final String port,
     @CliOption(key = {"user"}, mandatory = false, help = "Username for authorization; default is: 'admin'", unspecifiedDefaultValue = "admin")
     final String user,
     @CliOption(key = {"password"}, mandatory = false, help = "Password of the user; default is: 'admin'", unspecifiedDefaultValue = "admin")
     final String password) {
-
     try {
       client = new AmbariClient(host, port, user, password);
       context.setCluster(client.getClusterName());
       return "cluster:" + client.getClusterName() + "\n" + client.clusterList();
     } catch (Exception e) {
-      return "connection failure: " + e.getMessage();
+      return "Connection failure: " + e.getMessage();
     }
   }
-
 
   @CliAvailabilityIndicator({"tasks"})
   public boolean isTasksCommandAvailable() {
     return client != null;
   }
 
-  @CliCommand(value = "tasks", help = "Connects to an Ambari Server")
+  @CliCommand(value = "tasks", help = "Lists the Ambari tasks")
   public String tasks(
     @CliOption(key = {"id"}, mandatory = false, help = "id of the Reuest; default is: 1", unspecifiedDefaultValue = "1")
-    String id
-  ) {
+    String id) {
     return client.taskList(id);
   }
 
@@ -61,7 +58,7 @@ public class AmbariCommands implements CommandMarker {
     return client != null;
   }
 
-  @CliCommand(value = "hosts", help = "lists available hosts")
+  @CliCommand(value = "hosts", help = "Lists the available hosts")
   public String hosts() {
     return client.hostList();
   }
@@ -71,32 +68,31 @@ public class AmbariCommands implements CommandMarker {
     return client != null;
   }
 
-  @CliCommand(value = "services", help = "lists available services")
+  @CliCommand(value = "services", help = "Lists the available services")
   public String services() {
     return client.serviceList();
   }
 
   @CliAvailabilityIndicator({"serviceComponents"})
-  public boolean isserviceComponentsCommandAvailable() {
+  public boolean isServiceComponentsCommandAvailable() {
     return client != null;
   }
 
-  @CliCommand(value = "serviceComponents", help = "lists all Services with their Components")
+  @CliCommand(value = "serviceComponents", help = "Lists all services with their components")
   public String serviceComponents() {
     return client.allServiceComponents();
   }
 
   @CliAvailabilityIndicator({"focus"})
   public boolean isFocusCommandAvailable() {
-    return true;
+    return client != null;
   }
 
-  @CliCommand(value = "focus", help = "sets focus to the specified Host")
+  @CliCommand(value = "focus", help = "Sets the focus to the specified host")
   public String focus(
-    @CliOption(key = {"host"}, mandatory = true, help = "hostname") String host
-  ) {
+    @CliOption(key = {"host"}, mandatory = true, help = "hostname") String host) {
     context.setHost(host);
-    return "focus set to:" + host;
+    return "Focus set to:" + host;
   }
 
   @CliAvailabilityIndicator({"hostComponents"})
@@ -104,41 +100,40 @@ public class AmbariCommands implements CommandMarker {
     return context.getHost() != null;
   }
 
-  @CliCommand(value = "hostComponents", help = "list components assigned to the selected host")
+  @CliCommand(value = "hostComponents", help = "Lists the components assigned to the selected host")
   public String hostComponents() {
     return client.hostComponentList(context.getHost());
   }
 
   @CliAvailabilityIndicator({"blueprints"})
-  public boolean isblueprintsCommandAvailable() {
-    return true;
+  public boolean isBlueprintsCommandAvailable() {
+    return client != null;
   }
 
-  @CliCommand(value = "blueprints", help = "lists all known blueprint")
+  @CliCommand(value = "blueprints", help = "Lists all known blueprints")
   public String blueprints() {
     return client.blueprintList();
   }
 
   @CliAvailabilityIndicator({"debug on"})
-  public boolean isdebugOnCommandAvailable() {
+  public boolean isDebugOnCommandAvailable() {
     return !client.isDebugEnabled();
   }
 
-  @CliCommand(value = "debug on", help = "enables the display API url")
+  @CliCommand(value = "debug on", help = "Shows the URL of the API calls")
   public String debugOn() {
     client.setDebugEnabled(true);
     return "debug enabled";
   }
 
   @CliAvailabilityIndicator({"debug off"})
-  public boolean isdebugOffCommandAvailable() {
+  public boolean isDebugOffCommandAvailable() {
     return client.isDebugEnabled();
   }
 
-  @CliCommand(value = "debug off", help = "disables API url display ")
+  @CliCommand(value = "debug off", help = "Stops showing the URL of the API calls")
   public String debugOff() {
     client.setDebugEnabled(false);
     return "debug disabled";
   }
-
 }

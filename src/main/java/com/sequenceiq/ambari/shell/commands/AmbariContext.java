@@ -29,7 +29,6 @@ public class AmbariContext {
       if (host != null) {
         return String.format("%s/%s >", cluster, host);
       }
-
       return String.format("%s >", cluster);
     }
     return "ambari-shell>";

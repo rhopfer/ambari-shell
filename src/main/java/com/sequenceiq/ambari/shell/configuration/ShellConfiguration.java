@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.CommandLine;
 import org.springframework.shell.SimpleShellCommandLineOptions;
+import org.springframework.shell.commands.ExitCommands;
+import org.springframework.shell.commands.HelpCommands;
+import org.springframework.shell.commands.VersionCommands;
 import org.springframework.shell.converters.AvailableCommandsConverter;
 import org.springframework.shell.converters.BigDecimalConverter;
 import org.springframework.shell.converters.BigIntegerConverter;
@@ -20,14 +23,11 @@ import org.springframework.shell.converters.ShortConverter;
 import org.springframework.shell.converters.SimpleFileConverter;
 import org.springframework.shell.converters.StaticFieldConverterImpl;
 import org.springframework.shell.converters.StringConverter;
+import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.Converter;
 import org.springframework.shell.core.JLineShellComponent;
-import org.springframework.shell.plugin.BannerProvider;
 import org.springframework.shell.plugin.HistoryFileNameProvider;
-import org.springframework.shell.plugin.PromptProvider;
-import org.springframework.shell.plugin.support.DefaultBannerProvider;
 import org.springframework.shell.plugin.support.DefaultHistoryFileNameProvider;
-import org.springframework.shell.plugin.support.DefaultPromptProvider;
 import org.springframework.stereotype.Component;
 
 @Configuration
@@ -37,16 +37,6 @@ public class ShellConfiguration {
   @Bean
   HistoryFileNameProvider defaultHistoryFileNameProvider() {
     return new DefaultHistoryFileNameProvider();
-  }
-
-  //@Bean
-  PromptProvider defaultPromptProvider() {
-    return new DefaultPromptProvider();
-  }
-
-  //@Bean
-  BannerProvider defaultBannerProvider() {
-    return new DefaultBannerProvider();
   }
 
   @Bean(name = "shell")
@@ -137,5 +127,20 @@ public class ShellConfiguration {
   @Bean
   Converter StaticFieldConverterImpl() {
     return new StaticFieldConverterImpl();
+  }
+
+  @Bean
+  CommandMarker exitCommand() {
+    return new ExitCommands();
+  }
+
+  @Bean
+  CommandMarker versionCommands() {
+    return new VersionCommands();
+  }
+
+  @Bean
+  CommandMarker helpCommands() {
+    return new HelpCommands();
   }
 }

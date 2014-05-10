@@ -10,14 +10,15 @@ import com.sequenceiq.ambari.shell.commands.AmbariContext;
 public class AmbariPrompt implements PromptProvider {
 
   @Autowired
-  AmbariContext context;
+  private AmbariContext context;
 
+  @Override
   public String getProviderName() {
     return AmbariPrompt.class.getSimpleName();
   }
 
+  @Override
   public String getPrompt() {
     return context.getPrompt();
   }
-
 }
