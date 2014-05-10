@@ -23,6 +23,9 @@ import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
+/**
+ * Manages the text of the shell's prompt.
+ */
 @Component
 public class AmbariPrompt implements PromptProvider {
 

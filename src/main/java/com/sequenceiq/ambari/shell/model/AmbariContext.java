@@ -19,6 +19,9 @@ package com.sequenceiq.ambari.shell.model;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Holds information about the connected Ambari Server.
+ */
 @Component
 public class AmbariContext {
 
@@ -41,6 +44,11 @@ public class AmbariContext {
     this.host = host;
   }
 
+  /**
+   * Returns the appropriate shell prompt.
+   *
+   * @return prompt's text
+   */
   public String getPrompt() {
     if (cluster != null) {
       if (host != null) {

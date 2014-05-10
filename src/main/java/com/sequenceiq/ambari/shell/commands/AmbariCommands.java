@@ -28,6 +28,12 @@ import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.client.AmbariClientFactory;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
+/**
+ * Commands used in the shell. Does nothing more than executing and delegating the commands
+ * to the Ambari Server via a Groovy based client.
+ *
+ * @see com.sequenceiq.ambari.client.AmbariClient
+ */
 @Component
 public class AmbariCommands implements CommandMarker {
 
@@ -37,11 +43,27 @@ public class AmbariCommands implements CommandMarker {
   private AmbariClientFactory clientFactory;
   private AmbariClient client;
 
+  /**
+   * Checks if the connect command is available or not.
+   * Always returns true because you can connect any time
+   * to an Ambari Server.
+   *
+   * @return true, always
+   */
   @CliAvailabilityIndicator({"connect"})
   public boolean isConnectCommandAvailable() {
     return true;
   }
 
+  /**
+   * Connects to an Ambari Server.
+   *
+   * @param host     hostname of the Ambari Server
+   * @param port     port number which the Ambari Server listens on
+   * @param user     username for authentication
+   * @param password password for authentication
+   * @return status response
+   */
   @CliCommand(value = "connect", help = "Connects to an Ambari Server")
   public String connect(
     @CliOption(key = {"host"}, mandatory = false, help = "Hostname of the Ambari Server; default is: 'localhost'", unspecifiedDefaultValue = "localhost")
@@ -61,11 +83,22 @@ public class AmbariCommands implements CommandMarker {
     }
   }
 
+  /**
+   * Checks whether the tasks command is available or not.
+   *
+   * @return true if its available false otherwise
+   */
   @CliAvailabilityIndicator({"tasks"})
   public boolean isTasksCommandAvailable() {
     return client != null;
   }
 
+  /**
+   * Prints the tasks of the Ambari Server.
+   *
+   * @param id id of the request
+   * @return task list
+   */
   @CliCommand(value = "tasks", help = "Lists the Ambari tasks")
   public String tasks(
     @CliOption(key = {"id"}, mandatory = false, help = "Id of the request; default is: 1", unspecifiedDefaultValue = "1")
@@ -73,41 +106,82 @@ public class AmbariCommands implements CommandMarker {
     return client.taskList(id);
   }
 
+  /**
+   * Checks whether the hosts command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"hosts"})
   public boolean isHostsCommandAvailable() {
     return client != null;
   }
 
+  /**
+   * Prints the available hosts of the Ambari Server.
+   *
+   * @return host list
+   */
   @CliCommand(value = "hosts", help = "Lists the available hosts")
   public String hosts() {
     return client.hostList();
   }
 
+  /**
+   * Checks whether the services command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"services"})
   public boolean isServicesCommandAvailable() {
     return client != null;
   }
 
+  /**
+   * Prints the available services of the Ambari Server.
+   *
+   * @return service list
+   */
   @CliCommand(value = "services", help = "Lists the available services")
   public String services() {
     return client.serviceList();
   }
 
+  /**
+   * Checks whether the serviceComponents command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"serviceComponents"})
   public boolean isServiceComponentsCommandAvailable() {
     return client != null;
   }
 
+  /**
+   * Prints the service components of the Ambari Server.
+   *
+   * @return service component list
+   */
   @CliCommand(value = "serviceComponents", help = "Lists all services with their components")
   public String serviceComponents() {
     return client.allServiceComponents();
   }
 
+  /**
+   * Checks whether the focus command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"focus"})
   public boolean isFocusCommandAvailable() {
     return client != null;
   }
 
+  /**
+   * Sets the focus to the specified host.
+   *
+   * @param host the host to set the focus to
+   * @return status message
+   */
   @CliCommand(value = "focus", help = "Sets the focus to the specified host")
   public String focus(
     @CliOption(key = {"host"}, mandatory = true, help = "hostname") String host) {
@@ -115,42 +189,82 @@ public class AmbariCommands implements CommandMarker {
     return "Focus set to:" + host;
   }
 
+  /**
+   * Checks whether the hostComponents command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"hostComponents"})
   public boolean isHostComponentsCommandAvailable() {
     return context.getHost() != null;
   }
 
+  /**
+   * Prints the components which belongs to the host previously set the focus on.
+   *
+   * @return list of host components
+   */
   @CliCommand(value = "hostComponents", help = "Lists the components assigned to the selected host")
   public String hostComponents() {
     return client.hostComponentList(context.getHost());
   }
 
+  /**
+   * Checks whether the blueprints command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"blueprints"})
   public boolean isBlueprintsCommandAvailable() {
     return client != null;
   }
 
+  /**
+   * Prints all the blueprints.
+   *
+   * @return list of blueprints
+   */
   @CliCommand(value = "blueprints", help = "Lists all known blueprints")
   public String blueprints() {
     return client.blueprintList();
   }
 
+  /**
+   * Checks whether the debug on command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"debug on"})
   public boolean isDebugOnCommandAvailable() {
     return !client.isDebugEnabled();
   }
 
+  /**
+   * Turns the debug on. From now on users will see the URLs of the API calls.
+   *
+   * @return status message
+   */
   @CliCommand(value = "debug on", help = "Shows the URL of the API calls")
   public String debugOn() {
     client.setDebugEnabled(true);
     return "debug enabled";
   }
 
+  /**
+   * Checks whether the debug off command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator({"debug off"})
   public boolean isDebugOffCommandAvailable() {
     return client.isDebugEnabled();
   }
 
+  /**
+   * Turns the debug off. URLs are not visible anymore.
+   *
+   * @return status message
+   */
   @CliCommand(value = "debug off", help = "Stops showing the URL of the API calls")
   public String debugOff() {
     client.setDebugEnabled(false);

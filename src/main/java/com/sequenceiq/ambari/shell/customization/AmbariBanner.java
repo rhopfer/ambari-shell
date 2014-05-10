@@ -22,6 +22,9 @@ import org.springframework.stereotype.Component;
 
 import com.github.lalyos.jfiglet.FigletFont;
 
+/**
+ * Prints the banner when the user starts the shell.
+ */
 @Component
 public class AmbariBanner implements BannerProvider {
 

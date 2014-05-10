@@ -45,10 +45,11 @@ import org.springframework.shell.core.Converter;
 import org.springframework.shell.core.JLineShellComponent;
 import org.springframework.shell.plugin.HistoryFileNameProvider;
 import org.springframework.shell.plugin.support.DefaultHistoryFileNameProvider;
-import org.springframework.stereotype.Component;
 
+/**
+ * Spring bean definitions.
+ */
 @Configuration
-@Component
 public class ShellConfiguration {
 
   @Bean

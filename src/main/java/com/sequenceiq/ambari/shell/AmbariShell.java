@@ -25,6 +25,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.shell.core.JLineShellComponent;
 
+/**
+ * Shell bootstrap.
+ */
 @Configuration
 @ComponentScan(basePackageClasses = {AmbariShell.class})
 public class AmbariShell implements CommandLineRunner {
