@@ -23,7 +23,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.shell.core.ExitShellRequest;
 import org.springframework.shell.core.JLineShellComponent;
 
 @Configuration
@@ -36,17 +35,9 @@ public class AmbariShell implements CommandLineRunner {
   @Override
   public void run(String... arg0) throws Exception {
     JLineShellComponent shell = ctx.getBean("shell", JLineShellComponent.class);
-    ExitShellRequest exitShellRequest;
-
     shell.start();
     shell.promptLoop();
-    exitShellRequest = shell.getExitShellRequest();
-    if (exitShellRequest == null) {
-      // shouldn't really happen, but we'll fallback to this anyway
-      exitShellRequest = ExitShellRequest.NORMAL_EXIT;
-    }
     shell.waitForComplete();
-
     ctx.close();
   }
 

@@ -25,6 +25,7 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.client.AmbariClientFactory;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 @Component
@@ -32,8 +33,9 @@ public class AmbariCommands implements CommandMarker {
 
   @Autowired
   private AmbariContext context;
-
-  private AmbariClient client = null;
+  @Autowired
+  private AmbariClientFactory clientFactory;
+  private AmbariClient client;
 
   @CliAvailabilityIndicator({"connect"})
   public boolean isConnectCommandAvailable() {
@@ -51,7 +53,7 @@ public class AmbariCommands implements CommandMarker {
     @CliOption(key = {"password"}, mandatory = false, help = "Password of the user; default is: 'admin'", unspecifiedDefaultValue = "admin")
     String password) {
     try {
-      client = new AmbariClient(host, port, user, password);
+      client = clientFactory.create(host, port, user, password);
       context.setCluster(client.getClusterName());
       return "cluster:" + client.getClusterName() + "\n" + client.clusterList();
     } catch (Exception e) {
@@ -66,7 +68,7 @@ public class AmbariCommands implements CommandMarker {
 
   @CliCommand(value = "tasks", help = "Lists the Ambari tasks")
   public String tasks(
-    @CliOption(key = {"id"}, mandatory = false, help = "id of the Reuest; default is: 1", unspecifiedDefaultValue = "1")
+    @CliOption(key = {"id"}, mandatory = false, help = "Id of the request; default is: 1", unspecifiedDefaultValue = "1")
     String id) {
     return client.taskList(id);
   }
