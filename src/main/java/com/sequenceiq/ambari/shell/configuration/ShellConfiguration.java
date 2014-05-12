@@ -174,9 +174,9 @@ public class ShellConfiguration {
   @Scope("prototype")
   AmbariClient createClient() {
     return new AmbariClient(
-      ambariContext.getClientHost(),
-      ambariContext.getClientPort(),
-      ambariContext.getUserName(),
-      ambariContext.getPassword());
+      ambariContext.getServerHost(),
+      ambariContext.getServerPort(),
+      ambariContext.getServerUser(),
+      ambariContext.getServerPass());
   }
 }

@@ -75,10 +75,7 @@ public class AmbariCommands implements CommandMarker {
     @CliOption(key = {"password"}, mandatory = false, help = "Password of the user; default is: 'admin'", unspecifiedDefaultValue = "admin")
     String password) {
     try {
-      context.setClientHost(host);
-      context.setClientPort(port);
-      context.setUserName(user);
-      context.setPassword(password);
+      context.setServerConnection(host, port, user, password);
       client = applicationContext.getBean("ambariClient", AmbariClient.class);
       context.setCluster(client.getClusterName());
       return "cluster:" + client.getClusterName() + "\n" + client.clusterList();

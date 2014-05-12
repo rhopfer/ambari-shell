@@ -25,12 +25,33 @@ import org.springframework.stereotype.Component;
 @Component
 public class AmbariContext {
 
-  private String clientHost;
-  private String clientPort;
-  private String userName;
-  private String password;
   private String host;
   private String cluster;
+  private ServerConnection serverConnection;
+
+  public AmbariContext() {
+    serverConnection = new ServerConnection();
+  }
+
+  public void setServerConnection(String host, String port, String user, String pass) {
+    serverConnection = new ServerConnection(host, port, user, pass);
+  }
+
+  public String getServerHost() {
+    return serverConnection.getHost();
+  }
+
+  public String getServerPort() {
+    return serverConnection.getPort();
+  }
+
+  public String getServerUser() {
+    return serverConnection.getUser();
+  }
+
+  public String getServerPass() {
+    return serverConnection.getPass();
+  }
 
   public String getCluster() {
     return cluster;
@@ -48,38 +69,6 @@ public class AmbariContext {
     this.host = host;
   }
 
-  public String getClientHost() {
-    return clientHost;
-  }
-
-  public void setClientHost(String clientHost) {
-    this.clientHost = clientHost;
-  }
-
-  public String getClientPort() {
-    return clientPort;
-  }
-
-  public void setClientPort(String clientPort) {
-    this.clientPort = clientPort;
-  }
-
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
   /**
    * Returns the appropriate shell prompt.
    *
@@ -93,5 +82,54 @@ public class AmbariContext {
       return String.format("%s >", cluster);
     }
     return "ambari-shell>";
+  }
+
+  private class ServerConnection {
+    private String host;
+    private String port;
+    private String user;
+    private String pass;
+
+    private ServerConnection() {
+    }
+
+    private ServerConnection(String host, String port, String user, String pass) {
+      this.host = host;
+      this.port = port;
+      this.user = user;
+      this.pass = pass;
+    }
+
+    public String getHost() {
+      return host;
+    }
+
+    public void setHost(String host) {
+      this.host = host;
+    }
+
+    public String getPort() {
+      return port;
+    }
+
+    public void setPort(String port) {
+      this.port = port;
+    }
+
+    public String getUser() {
+      return user;
+    }
+
+    public void setUser(String user) {
+      this.user = user;
+    }
+
+    public String getPass() {
+      return pass;
+    }
+
+    public void setPass(String pass) {
+      this.pass = pass;
+    }
   }
 }
