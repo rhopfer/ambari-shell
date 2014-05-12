@@ -17,8 +17,10 @@
  */
 package com.sequenceiq.ambari.shell.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.shell.CommandLine;
 import org.springframework.shell.SimpleShellCommandLineOptions;
 import org.springframework.shell.commands.ExitCommands;
@@ -46,11 +48,17 @@ import org.springframework.shell.core.JLineShellComponent;
 import org.springframework.shell.plugin.HistoryFileNameProvider;
 import org.springframework.shell.plugin.support.DefaultHistoryFileNameProvider;
 
+import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.model.AmbariContext;
+
 /**
  * Spring bean definitions.
  */
 @Configuration
 public class ShellConfiguration {
+
+  @Autowired
+  private AmbariContext ambariContext;
 
   @Bean
   HistoryFileNameProvider defaultHistoryFileNameProvider() {
@@ -160,5 +168,15 @@ public class ShellConfiguration {
   @Bean
   CommandMarker helpCommands() {
     return new HelpCommands();
+  }
+
+  @Bean(name = "ambariClient")
+  @Scope("prototype")
+  AmbariClient createClient() {
+    return new AmbariClient(
+      ambariContext.getClientHost(),
+      ambariContext.getClientPort(),
+      ambariContext.getUserName(),
+      ambariContext.getPassword());
   }
 }

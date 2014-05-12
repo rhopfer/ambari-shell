@@ -25,6 +25,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class AmbariContext {
 
+  private String clientHost;
+  private String clientPort;
+  private String userName;
+  private String password;
   private String host;
   private String cluster;
 
@@ -42,6 +46,38 @@ public class AmbariContext {
 
   public void setHost(String host) {
     this.host = host;
+  }
+
+  public String getClientHost() {
+    return clientHost;
+  }
+
+  public void setClientHost(String clientHost) {
+    this.clientHost = clientHost;
+  }
+
+  public String getClientPort() {
+    return clientPort;
+  }
+
+  public void setClientPort(String clientPort) {
+    this.clientPort = clientPort;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   /**

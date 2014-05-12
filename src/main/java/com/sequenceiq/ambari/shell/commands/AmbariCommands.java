@@ -18,6 +18,7 @@
 package com.sequenceiq.ambari.shell.commands;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
 import org.springframework.shell.core.annotation.CliCommand;
@@ -25,7 +26,6 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
-import com.sequenceiq.ambari.shell.client.AmbariClientFactory;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 /**
@@ -40,7 +40,7 @@ public class AmbariCommands implements CommandMarker {
   @Autowired
   private AmbariContext context;
   @Autowired
-  private AmbariClientFactory clientFactory;
+  private ApplicationContext applicationContext;
   private AmbariClient client;
 
   /**
@@ -75,7 +75,11 @@ public class AmbariCommands implements CommandMarker {
     @CliOption(key = {"password"}, mandatory = false, help = "Password of the user; default is: 'admin'", unspecifiedDefaultValue = "admin")
     String password) {
     try {
-      client = clientFactory.create(host, port, user, password);
+      context.setClientHost(host);
+      context.setClientPort(port);
+      context.setUserName(user);
+      context.setPassword(password);
+      client = applicationContext.getBean("ambariClient", AmbariClient.class);
       context.setCluster(client.getClusterName());
       return "cluster:" + client.getClusterName() + "\n" + client.clusterList();
     } catch (Exception e) {

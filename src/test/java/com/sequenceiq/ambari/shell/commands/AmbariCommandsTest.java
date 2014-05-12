@@ -28,10 +28,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sequenceiq.ambari.client.AmbariClient;
-import com.sequenceiq.ambari.shell.client.AmbariClientFactory;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -49,9 +49,9 @@ public class AmbariCommandsTest {
   @Mock
   private AmbariContext context;
   @Mock
-  private AmbariClientFactory clientFactory;
-  @Mock
   private AmbariClient client;
+  @Mock
+  private ApplicationContext applicationContext;
 
   @Test
   public void testIsConnectCommandAvailable() {
@@ -61,7 +61,7 @@ public class AmbariCommandsTest {
   @Test
   public void testConnect() {
     // GIVEN
-    when(clientFactory.create(HOST, PORT, USER, PASS)).thenReturn(client);
+    when(applicationContext.getBean("ambariClient", AmbariClient.class)).thenReturn(client);
     when(client.getClusterName()).thenReturn(CLUSTER);
     when(client.clusterList()).thenReturn(CLUSTER);
 
@@ -69,14 +69,13 @@ public class AmbariCommandsTest {
     commands.connect(HOST, PORT, USER, PASS);
 
     // THEN
-    verify(clientFactory).create(HOST, PORT, USER, PASS);
     verify(context).setCluster(CLUSTER);
   }
 
   @Test
   public void testConnectForConnectionError() {
     // GIVEN
-    when(clientFactory.create(HOST, PORT, USER, PASS)).thenThrow(new RuntimeException("refused"));
+    when(applicationContext.getBean("ambariClient", AmbariClient.class)).thenThrow(new RuntimeException("refused"));
 
     // WHEN
     String result = commands.connect(HOST, PORT, USER, PASS);
