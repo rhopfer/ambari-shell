@@ -168,23 +168,23 @@ public class AmbariCommands implements CommandMarker {
   }
 
   /**
-   * Checks whether the focus command is available or not.
+   * Checks whether the useHost command is available or not.
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"focus"})
-  public boolean isFocusCommandAvailable() {
+  @CliAvailabilityIndicator({"useHost"})
+  public boolean isUseHostCommandAvailable() {
     return client != null;
   }
 
   /**
-   * Sets the focus to the specified host.
+   * Sets the useHost to the specified host.
    *
    * @param host the host to set the focus to
    * @return status message
    */
-  @CliCommand(value = "focus", help = "Sets the focus to the specified host")
-  public String focus(
+  @CliCommand(value = "useHost", help = "Sets the useHost to the specified host")
+  public String useHost(
     @CliOption(key = {"host"}, mandatory = true, help = "hostname") String host) {
     context.setHost(host);
     return "Focus set to:" + host;
