@@ -86,6 +86,9 @@ public class AmbariCommandsTest {
 
   @Test
   public void testIsTasksCommandAvailable() {
+    // GIVEN
+    when(context.getCluster()).thenReturn(CLUSTER);
+
     // WHEN
     boolean result = commands.isTasksCommandAvailable();
 
@@ -96,7 +99,7 @@ public class AmbariCommandsTest {
   @Test
   public void testIsTasksCommandAvailableNot() {
     // GIVEN
-    ReflectionTestUtils.setField(commands, "client", null);
+    when(context.getCluster()).thenReturn(null);
 
     // WHEN
     boolean result = commands.isTasksCommandAvailable();
@@ -121,6 +124,9 @@ public class AmbariCommandsTest {
   @Test
   public void testIsHostsCommandAvailable() {
     // WHEN
+    when(context.getCluster()).thenReturn(CLUSTER);
+
+    // WHEN
     boolean result = commands.isHostsCommandAvailable();
 
     // THEN
@@ -130,7 +136,7 @@ public class AmbariCommandsTest {
   @Test
   public void testIsHostsCommandAvailableNot() {
     // GIVEN
-    ReflectionTestUtils.setField(commands, "client", null);
+    when(context.getCluster()).thenReturn(null);
 
     // WHEN
     boolean result = commands.isHostsCommandAvailable();
@@ -259,6 +265,9 @@ public class AmbariCommandsTest {
 
   @Test
   public void testIsServicesCommandAvailable() {
+    // GIVEN
+    when(context.getCluster()).thenReturn(CLUSTER);
+
     // WHEN
     boolean result = commands.isServicesCommandAvailable();
 
@@ -269,7 +278,7 @@ public class AmbariCommandsTest {
   @Test
   public void testIsServicesCommandAvailableNot() {
     // GIVEN
-    ReflectionTestUtils.setField(commands, "client", null);
+    when(context.getCluster()).thenReturn(null);
 
     // WHEN
     boolean result = commands.isServicesCommandAvailable();
@@ -293,6 +302,9 @@ public class AmbariCommandsTest {
 
   @Test
   public void testIsServiceComponentsCommandAvailable() {
+    // GIVEN
+    when(context.getCluster()).thenReturn(CLUSTER);
+
     // WHEN
     boolean result = commands.isServiceComponentsCommandAvailable();
 
@@ -303,7 +315,7 @@ public class AmbariCommandsTest {
   @Test
   public void testIsServiceComponentsCommandAvailableNot() {
     // GIVEN
-    ReflectionTestUtils.setField(commands, "client", null);
+    when(context.getCluster()).thenReturn(null);
 
     // WHEN
     boolean result = commands.isServiceComponentsCommandAvailable();
@@ -326,7 +338,10 @@ public class AmbariCommandsTest {
   }
 
   @Test
-  public void testIsFocusCommandAvailable() {
+  public void testIsUseHostCommandAvailable() {
+    // GIVEN
+    when(context.getCluster()).thenReturn(CLUSTER);
+
     // WHEN
     boolean result = commands.isUseHostCommandAvailable();
 
@@ -335,9 +350,9 @@ public class AmbariCommandsTest {
   }
 
   @Test
-  public void testIsFocusCommandAvailableNot() {
+  public void testIsUseHostCommandAvailableNot() {
     // GIVEN
-    ReflectionTestUtils.setField(commands, "client", null);
+    when(context.getCluster()).thenReturn(null);
 
     // WHEN
     boolean result = commands.isUseHostCommandAvailable();
@@ -347,7 +362,7 @@ public class AmbariCommandsTest {
   }
 
   @Test
-  public void testFocus() {
+  public void testUseHost() {
     // WHEN
     commands.useHost(HOST);
 
@@ -356,7 +371,7 @@ public class AmbariCommandsTest {
   }
 
   @Test
-  public void testIsHostComponentsCommandAvailable(){
+  public void testIsHostComponentsCommandAvailable() {
     // GIVEN
     when(context.getHost()).thenReturn(HOST);
 
@@ -369,7 +384,7 @@ public class AmbariCommandsTest {
   }
 
   @Test
-  public void testIsHostComponentsCommandAvailableNot(){
+  public void testIsHostComponentsCommandAvailableNot() {
     // GIVEN
     when(context.getHost()).thenReturn(null);
 
@@ -382,7 +397,7 @@ public class AmbariCommandsTest {
   }
 
   @Test
-  public void testHosts(){
+  public void testHosts() {
     // GIVEN
     when(client.hostList()).thenReturn("list");
 

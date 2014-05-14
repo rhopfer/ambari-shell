@@ -91,7 +91,7 @@ public class AmbariCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"tasks"})
   public boolean isTasksCommandAvailable() {
-    return client != null;
+    return context.getCluster() != null;
   }
 
   /**
@@ -114,7 +114,7 @@ public class AmbariCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"hosts"})
   public boolean isHostsCommandAvailable() {
-    return client != null;
+    return context.getCluster() != null;
   }
 
   /**
@@ -134,7 +134,7 @@ public class AmbariCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"services"})
   public boolean isServicesCommandAvailable() {
-    return client != null;
+    return context.getCluster() != null;
   }
 
   /**
@@ -154,7 +154,7 @@ public class AmbariCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"serviceComponents"})
   public boolean isServiceComponentsCommandAvailable() {
-    return client != null;
+    return context.getCluster() != null;
   }
 
   /**
@@ -174,7 +174,7 @@ public class AmbariCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"useHost"})
   public boolean isUseHostCommandAvailable() {
-    return client != null;
+    return context.getCluster() != null;
   }
 
   /**
