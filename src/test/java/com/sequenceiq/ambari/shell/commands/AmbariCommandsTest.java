@@ -328,7 +328,7 @@ public class AmbariCommandsTest {
   @Test
   public void testIsFocusCommandAvailable() {
     // WHEN
-    boolean result = commands.isFocusCommandAvailable();
+    boolean result = commands.isUseHostCommandAvailable();
 
     // THEN
     assertTrue(result);
@@ -340,7 +340,7 @@ public class AmbariCommandsTest {
     ReflectionTestUtils.setField(commands, "client", null);
 
     // WHEN
-    boolean result = commands.isFocusCommandAvailable();
+    boolean result = commands.isUseHostCommandAvailable();
 
     // THEN
     assertFalse(result);
@@ -349,7 +349,7 @@ public class AmbariCommandsTest {
   @Test
   public void testFocus() {
     // WHEN
-    commands.focus(HOST);
+    commands.useHost(HOST);
 
     // THEN
     verify(context).setHost(HOST);
