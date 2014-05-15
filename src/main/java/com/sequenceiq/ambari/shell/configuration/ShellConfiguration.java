@@ -17,10 +17,10 @@
  */
 package com.sequenceiq.ambari.shell.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.shell.CommandLine;
 import org.springframework.shell.SimpleShellCommandLineOptions;
 import org.springframework.shell.commands.ExitCommands;
@@ -49,7 +49,6 @@ import org.springframework.shell.plugin.HistoryFileNameProvider;
 import org.springframework.shell.plugin.support.DefaultHistoryFileNameProvider;
 
 import com.sequenceiq.ambari.client.AmbariClient;
-import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 /**
  * Spring bean definitions.
@@ -57,8 +56,27 @@ import com.sequenceiq.ambari.shell.model.AmbariContext;
 @Configuration
 public class ShellConfiguration {
 
-  @Autowired
-  private AmbariContext ambariContext;
+  @Value("${ambari.host:localhost}")
+  private String host;
+
+  @Value("${ambari.port:8080}")
+  private String port;
+
+  @Value("${ambari.user:admin}")
+  private String user;
+
+  @Value("${ambari.password:admin}")
+  private String password;
+
+  @Bean
+  public AmbariClient createAmbariClient() {
+    return new AmbariClient(host, port, user, password);
+  }
+
+  @Bean
+  public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+    return new PropertySourcesPlaceholderConfigurer();
+  }
 
   @Bean
   HistoryFileNameProvider defaultHistoryFileNameProvider() {
@@ -168,15 +186,5 @@ public class ShellConfiguration {
   @Bean
   CommandMarker helpCommands() {
     return new HelpCommands();
-  }
-
-  @Bean(name = "ambariClient")
-  @Scope("prototype")
-  AmbariClient createClient() {
-    return new AmbariClient(
-      ambariContext.getServerHost(),
-      ambariContext.getServerPort(),
-      ambariContext.getServerUser(),
-      ambariContext.getServerPass());
   }
 }
