@@ -65,7 +65,7 @@ public class BasicCommands implements CommandMarker {
   public String tasks(
     @CliOption(key = {"id"}, mandatory = false, help = "Id of the request; default is: 1", unspecifiedDefaultValue = "1")
     String id) {
-    return client.taskList(id);
+    return client.showTaskList(id);
   }
 
   /**
@@ -73,7 +73,7 @@ public class BasicCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"services"})
+  @CliAvailabilityIndicator({"service list"})
   public boolean isServicesCommandAvailable() {
     return true;
   }
@@ -83,9 +83,9 @@ public class BasicCommands implements CommandMarker {
    *
    * @return service list
    */
-  @CliCommand(value = "services", help = "Lists the available services")
+  @CliCommand(value = "service list", help = "Lists the available services")
   public String services() {
-    return client.serviceList();
+    return client.showServiceList();
   }
 
   /**
@@ -93,7 +93,7 @@ public class BasicCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"serviceComponents"})
+  @CliAvailabilityIndicator({"service components"})
   public boolean isServiceComponentsCommandAvailable() {
     return true;
   }
@@ -103,9 +103,9 @@ public class BasicCommands implements CommandMarker {
    *
    * @return service component list
    */
-  @CliCommand(value = "serviceComponents", help = "Lists all services with their components")
+  @CliCommand(value = "service components", help = "Lists all services with their components")
   public String serviceComponents() {
-    return client.allServiceComponents();
+    return client.showServiceComponents();
   }
 
   /**

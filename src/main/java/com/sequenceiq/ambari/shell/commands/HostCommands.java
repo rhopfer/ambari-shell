@@ -28,7 +28,7 @@ public class HostCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"hosts"})
+  @CliAvailabilityIndicator({"host list"})
   public boolean isHostsCommandAvailable() {
     return true;
   }
@@ -38,9 +38,9 @@ public class HostCommands implements CommandMarker {
    *
    * @return host list
    */
-  @CliCommand(value = "hosts", help = "Lists the available hosts")
+  @CliCommand(value = "host list", help = "Lists the available hosts")
   public String hosts() {
-    return client.hostList();
+    return client.showHostList();
   }
 
   /**
@@ -83,6 +83,6 @@ public class HostCommands implements CommandMarker {
    */
   @CliCommand(value = "host components", help = "Lists the components assigned to the selected host")
   public String hostComponents() {
-    return client.hostComponentList(context.getFocusValue());
+    return client.showHostComponentList(context.getFocusValue());
   }
 }

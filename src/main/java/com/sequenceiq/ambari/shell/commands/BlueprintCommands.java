@@ -39,7 +39,7 @@ public class BlueprintCommands implements CommandMarker {
    */
   @CliCommand(value = "blueprint list", help = "Lists all known blueprints")
   public String listBlueprints() {
-    return client.blueprintList();
+    return client.showBlueprints();
   }
 
   @CliAvailabilityIndicator(value = {"blueprint show"})
