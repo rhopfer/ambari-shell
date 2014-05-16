@@ -31,7 +31,7 @@ public class ClusterCommands implements CommandMarker {
 
   @CliAvailabilityIndicator({"cluster build"})
   public boolean isFocusBlueprintCommandAvailable() {
-    return true;
+    return !context.isConnectedToCluster();
   }
 
   @CliCommand(value = {"cluster build"}, help = "Starts to build a cluster")

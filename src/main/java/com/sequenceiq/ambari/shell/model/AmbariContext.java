@@ -57,7 +57,7 @@ public class AmbariContext {
 
   public String getPrompt() {
     return focus.isType(FocusType.ROOT) ?
-      isConnectedToCluster() ? formatPrompt(focus.getPrefix(), cluster) : "ambari-shell" :
+      isConnectedToCluster() ? formatPrompt(focus.getPrefix(), cluster) : "ambari-shell>" :
       formatPrompt(focus.getPrefix(), focus.getValue());
   }
 
