@@ -52,4 +52,15 @@ public class BlueprintCommands implements CommandMarker {
     @CliOption(key = {"id"}, mandatory = true, help = "Id of the blueprint") String id) {
     return client.showBlueprint(id);
   }
+
+  @CliAvailabilityIndicator(value = "blueprint add")
+  public boolean isBlueprintAddCommandAvailable() {
+    return true;
+  }
+
+  @CliCommand(value = {"blueprint add"}, help = "Add a new blueprint from URL")
+  public String addBlueprint(
+    @CliOption(key = "url", mandatory = true, help = "URL of the blueprint to download from") String url) {
+    return client.addBlueprint(url);
+  }
 }
