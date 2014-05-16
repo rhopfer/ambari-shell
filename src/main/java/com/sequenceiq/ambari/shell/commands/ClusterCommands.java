@@ -78,6 +78,24 @@ public class ClusterCommands implements CommandMarker {
       String.format("%s has been added to %s", host, group) : String.format("%s is not a valid host group", group);
   }
 
+  @CliAvailabilityIndicator({"cluster preview"})
+  public boolean isAssignShowCommandAvailable() {
+    return context.isFocusOnClusterBuild();
+  }
+
+  @CliCommand(value = {"cluster preview"}, help = "Shows the currently assigned hosts")
+  public String showAssignments() {
+    StringBuilder sb = new StringBuilder();
+    for (String group : hostGroups.keySet()) {
+      sb.append(group).append(":");
+      for (String host : hostGroups.get(group)) {
+        sb.append("\n          ").append(host);
+      }
+      sb.append("\n");
+    }
+    return sb.toString();
+  }
+
   @CliAvailabilityIndicator({"cluster create"})
   public boolean isCreateClusterCommandAvailable() {
     return context.isFocusOnClusterBuild();
@@ -90,5 +108,4 @@ public class ClusterCommands implements CommandMarker {
     context.looseFocus();
     return result;
   }
-
 }
