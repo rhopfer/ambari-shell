@@ -17,7 +17,10 @@
  */
 package com.sequenceiq.ambari.shell.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.sequenceiq.ambari.client.AmbariClient;
 
 /**
  * Holds information about the connected Ambari Server.
@@ -25,111 +28,52 @@ import org.springframework.stereotype.Component;
 @Component
 public class AmbariContext {
 
-  private String host;
   private String cluster;
-  private ServerConnection serverConnection;
+  private Focus focus;
 
-  public AmbariContext() {
-    serverConnection = new ServerConnection();
-  }
-
-  public void setServerConnection(String host, String port, String user, String pass) {
-    serverConnection = new ServerConnection(host, port, user, pass);
-  }
-
-  public String getServerHost() {
-    return serverConnection.getHost();
-  }
-
-  public String getServerPort() {
-    return serverConnection.getPort();
-  }
-
-  public String getServerUser() {
-    return serverConnection.getUser();
-  }
-
-  public String getServerPass() {
-    return serverConnection.getPass();
+  @Autowired
+  public AmbariContext(AmbariClient client) {
+    this.cluster = client.getClusterName();
+    this.focus = getRootFocus();
   }
 
   public String getCluster() {
     return cluster;
   }
 
-  public void setCluster(String cluster) {
-    this.cluster = cluster;
+  public void setFocus(String id, FocusType type) {
+    this.focus = new Focus(id, type, cluster);
   }
 
-  public String getHost() {
-    return host;
+  public String getFocusValue() {
+    return focus.getValue();
   }
 
-  public void setHost(String host) {
-    this.host = host;
-  }
-
-  /**
-   * Returns the appropriate shell prompt.
-   *
-   * @return prompt's text
-   */
   public String getPrompt() {
-    if (cluster != null) {
-      if (host != null) {
-        return String.format("%s/%s >", cluster, host);
-      }
-      return String.format("%s >", cluster);
-    }
-    return "ambari-shell>";
+    return focus.getPrompt();
   }
 
-  private class ServerConnection {
-    private String host;
-    private String port;
-    private String user;
-    private String pass;
+  public boolean isFocusOnHost() {
+    return isFocusOn(FocusType.HOST);
+  }
 
-    private ServerConnection() {
-    }
+  public boolean isFocusOnClusterBuild() {
+    return isFocusOn(FocusType.CLUSTER_BUILD);
+  }
 
-    private ServerConnection(String host, String port, String user, String pass) {
-      this.host = host;
-      this.port = port;
-      this.user = user;
-      this.pass = pass;
-    }
+  public void looseFocus() {
+    this.focus = getRootFocus();
+  }
 
-    public String getHost() {
-      return host;
-    }
+  public String getHint() {
+    return focus.getType().hint();
+  }
 
-    public void setHost(String host) {
-      this.host = host;
-    }
+  private boolean isFocusOn(FocusType type) {
+    return focus.isType(type);
+  }
 
-    public String getPort() {
-      return port;
-    }
-
-    public void setPort(String port) {
-      this.port = port;
-    }
-
-    public String getUser() {
-      return user;
-    }
-
-    public void setUser(String user) {
-      this.user = user;
-    }
-
-    public String getPass() {
-      return pass;
-    }
-
-    public void setPass(String pass) {
-      this.pass = pass;
-    }
+  private Focus getRootFocus() {
+    return new Focus("root", FocusType.ROOT, cluster);
   }
 }
