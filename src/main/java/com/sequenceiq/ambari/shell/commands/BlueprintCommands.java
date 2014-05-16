@@ -1,5 +1,11 @@
 package com.sequenceiq.ambari.shell.commands;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
@@ -55,9 +61,31 @@ public class BlueprintCommands implements CommandMarker {
     return true;
   }
 
-  @CliCommand(value = {"blueprint add"}, help = "Add a new blueprint from URL")
+  @CliCommand(value = {"blueprint add"}, help = "Add a new blueprint with either --url or --file")
   public String addBlueprint(
-    @CliOption(key = "url", mandatory = true, help = "URL of the blueprint to download from") String url) {
-    return client.addBlueprint(url);
+    @CliOption(key = "url", mandatory = false, help = "URL of the blueprint to download from") String url,
+    @CliOption(key = "file", mandatory = false, help = "File which contains the blueprint") File file) {
+    String json = file == null ? readContent(url) : readContent(file);
+    return client.addBlueprint(json) ? "Blueprint added" : "Cannot add blueprint";
+  }
+
+  private String readContent(File file) {
+    String content = null;
+    try {
+      content = IOUtils.toString(new FileInputStream(file));
+    } catch (IOException e) {
+      // not important
+    }
+    return content;
+  }
+
+  private String readContent(String url) {
+    String content = null;
+    try {
+      content = IOUtils.toString(new URL(url));
+    } catch (IOException e) {
+      // not important
+    }
+    return content;
   }
 }
