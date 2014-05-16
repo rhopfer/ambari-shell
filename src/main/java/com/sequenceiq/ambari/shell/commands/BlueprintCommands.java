@@ -8,18 +8,15 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
-import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 @Component
 public class BlueprintCommands implements CommandMarker {
 
   private AmbariClient client;
-  private AmbariContext context;
 
   @Autowired
-  public BlueprintCommands(AmbariClient client, AmbariContext context) {
+  public BlueprintCommands(AmbariClient client) {
     this.client = client;
-    this.context = context;
   }
 
   /**

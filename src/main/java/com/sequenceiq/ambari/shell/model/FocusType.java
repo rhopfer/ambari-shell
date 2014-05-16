@@ -21,7 +21,7 @@ public enum FocusType {
 
   HOST("HOST", "Check the host components"),
   CLUSTER_BUILD("CLUSTER_BUILD", "Assign hosts to host groups and create a cluster"),
-  ROOT("", "Create or manage the cluster");
+  ROOT("CLUSTER", "Create or manage the cluster");
 
   private final String prefix;
   private final String hint;
@@ -36,6 +36,6 @@ public enum FocusType {
   }
 
   public String hint() {
-    return "HINT: " + hint;
+    return "Hint: " + hint;
   }
 }

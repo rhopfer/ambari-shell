@@ -21,24 +21,22 @@ public class Focus {
 
   private final String value;
   private final FocusType type;
-  private final String cluster;
 
-  public Focus(String value, FocusType type, String cluster) {
+  public Focus(String value, FocusType type) {
     this.value = value;
     this.type = type;
-    this.cluster = cluster;
   }
 
-  public String getPrompt() {
-    return isType(FocusType.ROOT) ? cluster + ">" : String.format("%s:%s>", type.prefix(), value);
+  public String getPrefix() {
+    return type.prefix();
   }
 
   public String getValue() {
     return value;
   }
 
-  public FocusType getType() {
-    return type;
+  public String getHint() {
+    return type.hint();
   }
 
   public boolean isType(FocusType type) {

@@ -29,25 +29,6 @@ public class ClusterCommands implements CommandMarker {
     this.context = context;
   }
 
-  public void newHostGroups(List<String> hostGroups) {
-    Map<String, List<String>> groups = new HashMap<String, List<String>>();
-    for (String hostGroup : hostGroups) {
-      groups.put(hostGroup, new ArrayList<String>());
-    }
-    this.hostGroups = groups;
-  }
-
-  public boolean addHostToGroup(String host, String group) {
-    boolean result = true;
-    List<String> hosts = hostGroups.get(group);
-    if (hosts == null) {
-      result = false;
-    } else {
-      hosts.add(host);
-    }
-    return result;
-  }
-
   @CliAvailabilityIndicator({"cluster build"})
   public boolean isFocusBlueprintCommandAvailable() {
     return true;
@@ -59,8 +40,8 @@ public class ClusterCommands implements CommandMarker {
     String message = "Not a valid blueprint id";
     if (client.doesBlueprintExists(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
-      newHostGroups(client.getHostGroups(id));
-      message = String.format("blueprint:\n%s\nhosts:\n%s", client.showBlueprint(id), client.showHostList());
+      message = client.showBlueprint(id);
+      createNewHostGroups();
     }
     return message;
   }
@@ -104,8 +85,33 @@ public class ClusterCommands implements CommandMarker {
   @CliCommand(value = {"cluster create"}, help = "Create a cluster based on current blueprint and assigned hosts")
   public String createCluster(
     @CliOption(key = {"name"}, mandatory = true, help = "Name of the cluster") String name) {
-    String result = client.createCluster(name, context.getFocusValue(), hostGroups);
-    context.looseFocus();
+    boolean success = client.createCluster(name, context.getFocusValue(), hostGroups);
+    if (success) {
+      context.connectCluster();
+      context.resetFocus();
+    } else {
+      client.deleteCluster(name);
+      createNewHostGroups();
+    }
+    return success ? "Successfully created cluster" : "Failed to create cluster";
+  }
+
+  private void createNewHostGroups() {
+    Map<String, List<String>> groups = new HashMap<String, List<String>>();
+    for (String hostGroup : client.getHostGroups(context.getFocusValue())) {
+      groups.put(hostGroup, new ArrayList<String>());
+    }
+    this.hostGroups = groups;
+  }
+
+  private boolean addHostToGroup(String host, String group) {
+    boolean result = true;
+    List<String> hosts = hostGroups.get(group);
+    if (hosts == null) {
+      result = false;
+    } else {
+      hosts.add(host);
+    }
     return result;
   }
 }

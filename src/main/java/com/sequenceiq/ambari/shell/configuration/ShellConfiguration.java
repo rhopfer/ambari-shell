@@ -25,6 +25,7 @@ import org.springframework.shell.CommandLine;
 import org.springframework.shell.SimpleShellCommandLineOptions;
 import org.springframework.shell.commands.ExitCommands;
 import org.springframework.shell.commands.HelpCommands;
+import org.springframework.shell.commands.ScriptCommands;
 import org.springframework.shell.commands.VersionCommands;
 import org.springframework.shell.converters.AvailableCommandsConverter;
 import org.springframework.shell.converters.BigDecimalConverter;
@@ -76,6 +77,11 @@ public class ShellConfiguration {
   @Bean
   public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
     return new PropertySourcesPlaceholderConfigurer();
+  }
+
+  @Bean
+  public ScriptCommands scriptCommands(){
+    return new ScriptCommands();
   }
 
   @Bean

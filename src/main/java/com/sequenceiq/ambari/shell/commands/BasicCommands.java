@@ -52,7 +52,7 @@ public class BasicCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"tasks"})
   public boolean isTasksCommandAvailable() {
-    return true;
+    return context.isConnectedToCluster();
   }
 
   /**
@@ -75,7 +75,7 @@ public class BasicCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"service list"})
   public boolean isServicesCommandAvailable() {
-    return true;
+    return context.isConnectedToCluster();
   }
 
   /**
@@ -95,7 +95,7 @@ public class BasicCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"service components"})
   public boolean isServiceComponentsCommandAvailable() {
-    return true;
+    return context.isConnectedToCluster();
   }
 
   /**

@@ -30,7 +30,7 @@ public class HostCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"host list"})
   public boolean isHostsCommandAvailable() {
-    return true;
+    return context.isConnectedToCluster();
   }
 
   /**
@@ -50,7 +50,7 @@ public class HostCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator({"host focus"})
   public boolean isFocusHostCommandAvailable() {
-    return true;
+    return context.isConnectedToCluster();
   }
 
   /**

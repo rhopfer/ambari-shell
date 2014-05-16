@@ -30,19 +30,25 @@ public class AmbariContext {
 
   private String cluster;
   private Focus focus;
+  private AmbariClient client;
 
   @Autowired
   public AmbariContext(AmbariClient client) {
+    this.client = client;
+    this.focus = getRootFocus();
     this.cluster = client.getClusterName();
+  }
+
+  public void connectCluster() {
+    this.cluster = client.getClusterName();
+  }
+
+  public void resetFocus() {
     this.focus = getRootFocus();
   }
 
-  public String getCluster() {
-    return cluster;
-  }
-
   public void setFocus(String id, FocusType type) {
-    this.focus = new Focus(id, type, cluster);
+    this.focus = new Focus(id, type);
   }
 
   public String getFocusValue() {
@@ -50,7 +56,13 @@ public class AmbariContext {
   }
 
   public String getPrompt() {
-    return focus.getPrompt();
+    return focus.isType(FocusType.ROOT) ?
+      isConnectedToCluster() ? formatPrompt(focus.getPrefix(), cluster) : "ambari-shell" :
+      formatPrompt(focus.getPrefix(), focus.getValue());
+  }
+
+  public boolean isConnectedToCluster() {
+    return cluster != null;
   }
 
   public boolean isFocusOnHost() {
@@ -61,12 +73,8 @@ public class AmbariContext {
     return isFocusOn(FocusType.CLUSTER_BUILD);
   }
 
-  public void looseFocus() {
-    this.focus = getRootFocus();
-  }
-
   public String getHint() {
-    return focus.getType().hint();
+    return focus.getHint();
   }
 
   private boolean isFocusOn(FocusType type) {
@@ -74,6 +82,10 @@ public class AmbariContext {
   }
 
   private Focus getRootFocus() {
-    return new Focus("root", FocusType.ROOT, cluster);
+    return new Focus("root", FocusType.ROOT);
+  }
+
+  private String formatPrompt(String prefix, String postfix) {
+    return String.format("%s:%s>", prefix, postfix);
   }
 }
