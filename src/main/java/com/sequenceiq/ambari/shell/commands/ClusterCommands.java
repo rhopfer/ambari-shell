@@ -60,7 +60,7 @@ public class ClusterCommands implements CommandMarker {
     if (client.doesBlueprintExists(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
       newHostGroups(client.getHostGroups(id));
-      message = String.format("Blueprint (%s) is in use", id);
+      message = String.format("blueprint:\n%s\nhosts:\n%s", client.showBlueprint(id), client.showHostList());
     }
     return message;
   }
