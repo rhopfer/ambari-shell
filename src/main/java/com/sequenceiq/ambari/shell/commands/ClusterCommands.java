@@ -59,7 +59,7 @@ public class ClusterCommands implements CommandMarker {
     String message = "Not a valid blueprint id";
     if (client.doesBlueprintExists(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
-      newHostGroups(client.hostGroupsByBlueprint(id));
+      newHostGroups(client.getHostGroups(id));
       message = String.format("Blueprint (%s) is in use", id);
     }
     return message;
