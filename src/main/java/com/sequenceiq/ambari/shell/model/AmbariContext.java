@@ -77,6 +77,10 @@ public class AmbariContext {
     return focus.getHint();
   }
 
+  public String getCluster() {
+    return cluster;
+  }
+
   private boolean isFocusOn(FocusType type) {
     return focus.isType(type);
   }

@@ -90,10 +90,24 @@ public class ClusterCommands implements CommandMarker {
       context.connectCluster();
       context.resetFocus();
     } else {
-      client.deleteCluster(name);
+      deleteCluster(name);
       createNewHostGroups();
     }
     return success ? "Successfully created cluster" : "Failed to create cluster";
+  }
+
+  @CliAvailabilityIndicator({"cluster delete"})
+  public boolean isDeleteClusterCommandAvailable() {
+    return context.isConnectedToCluster();
+  }
+
+  @CliCommand(value = {"cluster delete"}, help = "Delete the cluster")
+  public String deleteCluster() {
+    return deleteCluster(context.getCluster()) ? "Successfully deleted the cluster" : "Could not delete the cluster";
+  }
+
+  private boolean deleteCluster(String id) {
+    return client.deleteCluster(id);
   }
 
   private void createNewHostGroups() {
