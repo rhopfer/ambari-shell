@@ -69,6 +69,16 @@ public class BlueprintCommands implements CommandMarker {
     return client.addBlueprint(json) ? "Blueprint added" : "Cannot add blueprint";
   }
 
+  @CliAvailabilityIndicator(value = "blueprint defaults")
+  public boolean isBlueprintDefaultsAddCommandAvailable() {
+    return true;
+  }
+
+  @CliCommand(value = {"blueprint defaults"}, help = "Adds the default blueprints to Ambari")
+  public String addBlueprint() {
+    return client.addDefaultBlueprints() ? "Default blueprints added" : "Failed to add default blueprints";
+  }
+
   private String readContent(File file) {
     String content = null;
     try {
