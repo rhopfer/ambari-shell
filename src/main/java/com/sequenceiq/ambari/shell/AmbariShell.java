@@ -22,7 +22,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.shell.CommandLine;
 import org.springframework.shell.core.JLineShellComponent;
 
 /**
@@ -33,20 +33,27 @@ import org.springframework.shell.core.JLineShellComponent;
 public class AmbariShell implements CommandLineRunner {
 
   @Autowired
-  private GenericApplicationContext ctx;
+  private CommandLine commandLine;
+  @Autowired
+  private JLineShellComponent shell;
 
   @Override
-  public void run(String... arg0) throws Exception {
-    JLineShellComponent shell = ctx.getBean("shell", JLineShellComponent.class);
-    shell.start();
-    shell.promptLoop();
-    shell.waitForComplete();
-    ctx.close();
+  public void run(String... arg) throws Exception {
+    String[] shellCommandsToExecute = commandLine.getShellCommandsToExecute();
+    if (shellCommandsToExecute != null) {
+      for (String cmd : shellCommandsToExecute) {
+        if (!shell.executeScriptLine(cmd)) {
+          break;
+        }
+      }
+    } else {
+      shell.start();
+      shell.promptLoop();
+      shell.waitForComplete();
+    }
   }
 
   public static void main(String[] args) {
-    new SpringApplicationBuilder(AmbariShell.class)
-      .showBanner(false)
-      .run(args);
+    new SpringApplicationBuilder(AmbariShell.class).showBanner(false).run(args);
   }
 }

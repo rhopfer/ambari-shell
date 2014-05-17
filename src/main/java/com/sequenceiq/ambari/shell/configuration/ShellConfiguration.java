@@ -52,6 +52,9 @@ public class ShellConfiguration {
   @Value("${ambari.password:admin}")
   private String password;
 
+  @Value("${cmdfile:}")
+  private String cmdFile;
+
   @Bean
   AmbariClient createAmbariClient() {
     return new AmbariClient(host, port, user, password);
@@ -74,7 +77,8 @@ public class ShellConfiguration {
 
   @Bean
   CommandLine commandLine() throws Exception {
-    return SimpleShellCommandLineOptions.parseCommandLine(null);
+    String[] args = cmdFile.length() > 0 ? new String[]{"--cmdfile", cmdFile} : new String[0];
+    return SimpleShellCommandLineOptions.parseCommandLine(args);
   }
 
   @Bean
