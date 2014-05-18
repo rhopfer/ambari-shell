@@ -1,5 +1,7 @@
 package com.sequenceiq.ambari.shell.commands;
 
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
@@ -83,6 +85,6 @@ public class HostCommands implements CommandMarker {
    */
   @CliCommand(value = "host components", help = "Lists the components assigned to the selected host")
   public String hostComponents() {
-    return client.showHostComponentList(context.getFocusValue());
+    return renderSingleMap(client.getHostComponentsMap(context.getFocusValue()), "COMPONENT", "STATE");
   }
 }

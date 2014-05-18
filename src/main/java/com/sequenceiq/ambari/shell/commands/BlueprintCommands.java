@@ -1,5 +1,8 @@
 package com.sequenceiq.ambari.shell.commands;
 
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMultiValueMap;
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,7 +45,7 @@ public class BlueprintCommands implements CommandMarker {
    */
   @CliCommand(value = "blueprint list", help = "Lists all known blueprints")
   public String listBlueprints() {
-    return client.showBlueprints();
+    return renderSingleMap(client.getBlueprintsMap(), "BLUEPRINT", "STACK");
   }
 
   @CliAvailabilityIndicator(value = "blueprint show")
@@ -53,7 +56,7 @@ public class BlueprintCommands implements CommandMarker {
   @CliCommand(value = "blueprint show", help = "Shows the blueprint by its id")
   public String showBlueprint(
     @CliOption(key = "id", mandatory = true, help = "Id of the blueprint") String id) {
-    return client.showBlueprint(id);
+    return renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT");
   }
 
   @CliAvailabilityIndicator(value = "blueprint add")
