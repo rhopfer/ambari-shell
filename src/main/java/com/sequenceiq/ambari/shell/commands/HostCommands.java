@@ -28,7 +28,7 @@ public class HostCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"host list"})
+  @CliAvailabilityIndicator("host list")
   public boolean isHostsCommandAvailable() {
     return context.isConnectedToCluster();
   }
@@ -48,7 +48,7 @@ public class HostCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"host focus"})
+  @CliAvailabilityIndicator("host focus")
   public boolean isFocusHostCommandAvailable() {
     return context.isConnectedToCluster();
   }
@@ -61,7 +61,7 @@ public class HostCommands implements CommandMarker {
    */
   @CliCommand(value = "host focus", help = "Sets the useHost to the specified host")
   public String focusHost(
-    @CliOption(key = {"host"}, mandatory = true, help = "hostname") String host) {
+    @CliOption(key = "host", mandatory = true, help = "hostname") String host) {
     context.setFocus(host, FocusType.HOST);
     return "Focus set to:" + host;
   }
@@ -71,7 +71,7 @@ public class HostCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"host components"})
+  @CliAvailabilityIndicator("host components")
   public boolean isHostComponentsCommandAvailable() {
     return context.isFocusOnHost();
   }

@@ -30,7 +30,7 @@ public class BlueprintCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"blueprint list"})
+  @CliAvailabilityIndicator("blueprint list")
   public boolean isBlueprintListCommandAvailable() {
     return true;
   }
@@ -45,14 +45,14 @@ public class BlueprintCommands implements CommandMarker {
     return client.showBlueprints();
   }
 
-  @CliAvailabilityIndicator(value = {"blueprint show"})
+  @CliAvailabilityIndicator(value = "blueprint show")
   public boolean isBlueprintShowCommandAvailable() {
     return true;
   }
 
-  @CliCommand(value = {"blueprint show"}, help = "Shows the blueprint by its id")
+  @CliCommand(value = "blueprint show", help = "Shows the blueprint by its id")
   public String showBlueprint(
-    @CliOption(key = {"id"}, mandatory = true, help = "Id of the blueprint") String id) {
+    @CliOption(key = "id", mandatory = true, help = "Id of the blueprint") String id) {
     return client.showBlueprint(id);
   }
 
@@ -61,7 +61,7 @@ public class BlueprintCommands implements CommandMarker {
     return true;
   }
 
-  @CliCommand(value = {"blueprint add"}, help = "Add a new blueprint with either --url or --file")
+  @CliCommand(value = "blueprint add", help = "Add a new blueprint with either --url or --file")
   public String addBlueprint(
     @CliOption(key = "url", mandatory = false, help = "URL of the blueprint to download from") String url,
     @CliOption(key = "file", mandatory = false, help = "File which contains the blueprint") File file) {
@@ -74,7 +74,7 @@ public class BlueprintCommands implements CommandMarker {
     return true;
   }
 
-  @CliCommand(value = {"blueprint defaults"}, help = "Adds the default blueprints to Ambari")
+  @CliCommand(value = "blueprint defaults", help = "Adds the default blueprints to Ambari")
   public String addBlueprint() {
     return client.addDefaultBlueprints() ? "Default blueprints added" : "Failed to add default blueprints";
   }

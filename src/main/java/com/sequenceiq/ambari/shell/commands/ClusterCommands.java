@@ -29,14 +29,14 @@ public class ClusterCommands implements CommandMarker {
     this.context = context;
   }
 
-  @CliAvailabilityIndicator({"cluster build"})
+  @CliAvailabilityIndicator("cluster build")
   public boolean isFocusBlueprintCommandAvailable() {
     return !context.isConnectedToCluster();
   }
 
-  @CliCommand(value = {"cluster build"}, help = "Starts to build a cluster")
+  @CliCommand(value = "cluster build", help = "Starts to build a cluster")
   public String focusBlueprint(
-    @CliOption(key = {"blueprint"}, mandatory = true, help = "Id of the blueprint, use 'blueprints' command to see the list") String id) {
+    @CliOption(key = "blueprint", mandatory = true, help = "Id of the blueprint, use 'blueprints' command to see the list") String id) {
     String message = "Not a valid blueprint id";
     if (client.doesBlueprintExists(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
@@ -46,25 +46,25 @@ public class ClusterCommands implements CommandMarker {
     return message;
   }
 
-  @CliAvailabilityIndicator({"cluster assign"})
+  @CliAvailabilityIndicator("cluster assign")
   public boolean isAssignCommandAvailable() {
     return context.isFocusOnClusterBuild();
   }
 
-  @CliCommand(value = {"cluster assign"}, help = "Assign host to host group")
+  @CliCommand(value = "cluster assign", help = "Assign host to host group")
   public String assign(
-    @CliOption(key = {"host"}, mandatory = true, help = "Fully qualified host name") String host,
-    @CliOption(key = {"hostGroup"}, mandatory = true, help = "Host group which to assign the host") String group) {
+    @CliOption(key = "host", mandatory = true, help = "Fully qualified host name") String host,
+    @CliOption(key = "hostGroup", mandatory = true, help = "Host group which to assign the host") String group) {
     return addHostToGroup(host, group) ?
       String.format("%s has been added to %s", host, group) : String.format("%s is not a valid host group", group);
   }
 
-  @CliAvailabilityIndicator({"cluster preview"})
+  @CliAvailabilityIndicator("cluster preview")
   public boolean isAssignShowCommandAvailable() {
     return context.isFocusOnClusterBuild();
   }
 
-  @CliCommand(value = {"cluster preview"}, help = "Shows the currently assigned hosts")
+  @CliCommand(value = "cluster preview", help = "Shows the currently assigned hosts")
   public String showAssignments() {
     StringBuilder sb = new StringBuilder();
     for (String group : hostGroups.keySet()) {
@@ -77,14 +77,14 @@ public class ClusterCommands implements CommandMarker {
     return sb.toString();
   }
 
-  @CliAvailabilityIndicator({"cluster create"})
+  @CliAvailabilityIndicator("cluster create")
   public boolean isCreateClusterCommandAvailable() {
     return context.isFocusOnClusterBuild();
   }
 
-  @CliCommand(value = {"cluster create"}, help = "Create a cluster based on current blueprint and assigned hosts")
+  @CliCommand(value = "cluster create", help = "Create a cluster based on current blueprint and assigned hosts")
   public String createCluster(
-    @CliOption(key = {"name"}, mandatory = true, help = "Name of the cluster") String name) {
+    @CliOption(key = "name", mandatory = true, help = "Name of the cluster") String name) {
     boolean success = client.createCluster(name, context.getFocusValue(), hostGroups);
     if (success) {
       context.connectCluster();
@@ -96,12 +96,12 @@ public class ClusterCommands implements CommandMarker {
     return success ? "Successfully created cluster" : "Failed to create cluster";
   }
 
-  @CliAvailabilityIndicator({"cluster delete"})
+  @CliAvailabilityIndicator("cluster delete")
   public boolean isDeleteClusterCommandAvailable() {
     return context.isConnectedToCluster();
   }
 
-  @CliCommand(value = {"cluster delete"}, help = "Delete the cluster")
+  @CliCommand(value = "cluster delete", help = "Delete the cluster")
   public String deleteCluster() {
     return deleteCluster(context.getCluster()) ? "Successfully deleted the cluster" : "Could not delete the cluster";
   }

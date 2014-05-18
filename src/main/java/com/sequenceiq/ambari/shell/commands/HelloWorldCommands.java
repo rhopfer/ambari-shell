@@ -28,7 +28,7 @@ import com.sequenceiq.ambari.shell.AmbariShell;
 @Component
 public class HelloWorldCommands implements CommandMarker {
 
-  @CliAvailabilityIndicator({"hw simple"})
+  @CliAvailabilityIndicator("hw simple")
   public boolean isCommandAvailable() {
     return true;
   }

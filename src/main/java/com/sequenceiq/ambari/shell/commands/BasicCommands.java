@@ -50,7 +50,7 @@ public class BasicCommands implements CommandMarker {
    *
    * @return true if its available false otherwise
    */
-  @CliAvailabilityIndicator({"tasks"})
+  @CliAvailabilityIndicator("tasks")
   public boolean isTasksCommandAvailable() {
     return context.isConnectedToCluster();
   }
@@ -63,7 +63,7 @@ public class BasicCommands implements CommandMarker {
    */
   @CliCommand(value = "tasks", help = "Lists the Ambari tasks")
   public String tasks(
-    @CliOption(key = {"id"}, mandatory = false, help = "Id of the request; default is: 1", unspecifiedDefaultValue = "1")
+    @CliOption(key = "id", mandatory = false, help = "Id of the request; default is: 1", unspecifiedDefaultValue = "1")
     String id) {
     return client.showTaskList(id);
   }
@@ -73,7 +73,7 @@ public class BasicCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"service list"})
+  @CliAvailabilityIndicator("service list")
   public boolean isServicesCommandAvailable() {
     return context.isConnectedToCluster();
   }
@@ -93,7 +93,7 @@ public class BasicCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"service components"})
+  @CliAvailabilityIndicator("service components")
   public boolean isServiceComponentsCommandAvailable() {
     return context.isConnectedToCluster();
   }
@@ -113,7 +113,7 @@ public class BasicCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"debug on"})
+  @CliAvailabilityIndicator("debug on")
   public boolean isDebugOnCommandAvailable() {
     return !client.isDebugEnabled();
   }
@@ -134,7 +134,7 @@ public class BasicCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator({"debug off"})
+  @CliAvailabilityIndicator("debug off")
   public boolean isDebugOffCommandAvailable() {
     return client.isDebugEnabled();
   }
@@ -150,7 +150,7 @@ public class BasicCommands implements CommandMarker {
     return "debug disabled";
   }
 
-  @CliAvailabilityIndicator({"hint"})
+  @CliAvailabilityIndicator("hint")
   public boolean isHintCommandAvailable() {
     return true;
   }
