@@ -35,6 +35,8 @@ import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.FocusType;
 
+import groovyx.net.http.HttpResponseException;
+
 /**
  * Cluster related commands used in the shell.
  *
@@ -145,16 +147,22 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliCommand(value = "cluster create", help = "Create a cluster based on current blueprint and assigned hosts")
   public String createCluster() {
+    String message = "Successfully created the cluster";
     String blueprint = context.getFocusValue();
-    boolean success = client.createCluster(blueprint, blueprint, hostGroups);
-    if (success) {
+    try {
+      client.createCluster(blueprint, blueprint, hostGroups);
       context.connectCluster();
       context.resetFocus();
-    } else {
-      deleteCluster(blueprint);
+    } catch (HttpResponseException e) {
       createNewHostGroups();
+      message = "Failed to create the cluster: " + e.getMessage();
+      try {
+        deleteCluster(blueprint);
+      } catch (HttpResponseException e1) {
+        message += ". Failed to cleanup cluster creation: " + e1.getMessage();
+      }
     }
-    return success ? "Successfully created cluster" : "Failed to create cluster";
+    return message;
   }
 
   /**
@@ -174,11 +182,17 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliCommand(value = "cluster delete", help = "Delete the cluster")
   public String deleteCluster() {
-    return deleteCluster(context.getCluster()) ? "Successfully deleted the cluster" : "Could not delete the cluster";
+    String message = "Successfully deleted the cluster";
+    try {
+      deleteCluster(context.getCluster());
+    } catch (HttpResponseException e) {
+      message = "Could not delete the cluster: " + e.getMessage();
+    }
+    return message;
   }
 
-  private boolean deleteCluster(String id) {
-    return client.deleteCluster(id);
+  private void deleteCluster(String id) throws HttpResponseException {
+    client.deleteCluster(id);
   }
 
   private void createNewHostGroups() {
