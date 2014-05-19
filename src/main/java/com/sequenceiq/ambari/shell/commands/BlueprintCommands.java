@@ -35,6 +35,8 @@ import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
 
+import groovyx.net.http.HttpResponseException;
+
 /**
  * Blueprint related commands used in the shell.
  *
@@ -115,7 +117,13 @@ public class BlueprintCommands implements CommandMarker {
     @CliOption(key = "url", mandatory = false, help = "URL of the blueprint to download from") String url,
     @CliOption(key = "file", mandatory = false, help = "File which contains the blueprint") File file) {
     String json = file == null ? readContent(url) : readContent(file);
-    return client.addBlueprint(json) ? "Blueprint added" : "Cannot add blueprint";
+    String message = "Blueprint added";
+    try {
+      client.addBlueprint(json);
+    } catch (HttpResponseException e) {
+      message = "Cannot add blueprint: " + e.getMessage();
+    }
+    return message;
   }
 
   /**
@@ -135,7 +143,13 @@ public class BlueprintCommands implements CommandMarker {
    */
   @CliCommand(value = "blueprint defaults", help = "Adds the default blueprints to Ambari")
   public String addBlueprint() {
-    return client.addDefaultBlueprints() ? "Default blueprints added" : "Failed to add default blueprints";
+    String message = "Default blueprints added";
+    try {
+      client.addDefaultBlueprints();
+    } catch (HttpResponseException e) {
+      message = "Failed to add default blueprints: " + e.getMessage();
+    }
+    return message;
   }
 
   private String readContent(File file) {
