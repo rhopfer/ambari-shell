@@ -1,5 +1,7 @@
 package com.sequenceiq.ambari.shell.commands;
 
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMultiValueMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +42,7 @@ public class ClusterCommands implements CommandMarker {
     String message = "Not a valid blueprint id";
     if (client.doesBlueprintExists(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
-      message = client.showBlueprint(id);
+      message = renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT");
       createNewHostGroups();
     }
     return message;
@@ -66,15 +68,7 @@ public class ClusterCommands implements CommandMarker {
 
   @CliCommand(value = "cluster preview", help = "Shows the currently assigned hosts")
   public String showAssignments() {
-    StringBuilder sb = new StringBuilder();
-    for (String group : hostGroups.keySet()) {
-      sb.append(group).append(":");
-      for (String host : hostGroups.get(group)) {
-        sb.append("\n          ").append(host);
-      }
-      sb.append("\n");
-    }
-    return sb.toString();
+    return renderMultiValueMap(hostGroups, "HOSTGROUP", "HOST");
   }
 
   @CliAvailabilityIndicator("cluster create")
@@ -83,14 +77,14 @@ public class ClusterCommands implements CommandMarker {
   }
 
   @CliCommand(value = "cluster create", help = "Create a cluster based on current blueprint and assigned hosts")
-  public String createCluster(
-    @CliOption(key = "name", mandatory = true, help = "Name of the cluster") String name) {
-    boolean success = client.createCluster(name, context.getFocusValue(), hostGroups);
+  public String createCluster() {
+    String blueprint = context.getFocusValue();
+    boolean success = client.createCluster(blueprint, blueprint, hostGroups);
     if (success) {
       context.connectCluster();
       context.resetFocus();
     } else {
-      deleteCluster(name);
+      deleteCluster(blueprint);
       createNewHostGroups();
     }
     return success ? "Successfully created cluster" : "Failed to create cluster";

@@ -17,6 +17,9 @@
  */
 package com.sequenceiq.ambari.shell.commands;
 
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMapValueMap;
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
@@ -63,9 +66,8 @@ public class BasicCommands implements CommandMarker {
    */
   @CliCommand(value = "tasks", help = "Lists the Ambari tasks")
   public String tasks(
-    @CliOption(key = "id", mandatory = false, help = "Id of the request; default is: 1", unspecifiedDefaultValue = "1")
-    String id) {
-    return client.showTaskList(id);
+    @CliOption(key = "id", mandatory = false, help = "Id of the request; default is: 1", unspecifiedDefaultValue = "1") String id) {
+    return renderSingleMap(client.getTaskMap(id), "TASK", "STATUS");
   }
 
   /**
@@ -85,7 +87,7 @@ public class BasicCommands implements CommandMarker {
    */
   @CliCommand(value = "service list", help = "Lists the available services")
   public String services() {
-    return client.showServiceList();
+    return renderSingleMap(client.getServicesMap(), "SERVICE", "STATE");
   }
 
   /**
@@ -105,7 +107,7 @@ public class BasicCommands implements CommandMarker {
    */
   @CliCommand(value = "service components", help = "Lists all services with their components")
   public String serviceComponents() {
-    return client.showServiceComponents();
+    return renderMapValueMap(client.getServiceComponentsMap(), "SERVICE", "COMPONENT", "STATE");
   }
 
   /**
