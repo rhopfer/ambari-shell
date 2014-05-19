@@ -17,6 +17,12 @@
  */
 package com.sequenceiq.ambari.shell.model;
 
+/**
+ * Holds information about the focus. Focus give you the ability to
+ * provide context sensitive commands.
+ *
+ * @see com.sequenceiq.ambari.shell.model.FocusType
+ */
 public class Focus {
 
   private final String value;
@@ -39,6 +45,12 @@ public class Focus {
     return type.hint();
   }
 
+  /**
+   * Checks if the current focus exists with the provided one.
+   *
+   * @param type type to check with the current
+   * @return true if they match false otherwise
+   */
   public boolean isType(FocusType type) {
     return this.type == type;
   }

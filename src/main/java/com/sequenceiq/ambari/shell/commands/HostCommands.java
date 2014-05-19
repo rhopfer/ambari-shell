@@ -1,3 +1,20 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.sequenceiq.ambari.shell.commands;
 
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
@@ -13,6 +30,11 @@ import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.FocusType;
 
+/**
+ * Host related commands used in the shell.
+ *
+ * @see com.sequenceiq.ambari.client.AmbariClient
+ */
 @Component
 public class HostCommands implements CommandMarker {
 
@@ -26,7 +48,7 @@ public class HostCommands implements CommandMarker {
   }
 
   /**
-   * Checks whether the hosts command is available or not.
+   * Checks whether the host list command is available or not.
    *
    * @return true if available false otherwise
    */
@@ -46,7 +68,7 @@ public class HostCommands implements CommandMarker {
   }
 
   /**
-   * Checks whether the useHost command is available or not.
+   * Checks whether the host focus command is available or not.
    *
    * @return true if available false otherwise
    */
@@ -56,7 +78,7 @@ public class HostCommands implements CommandMarker {
   }
 
   /**
-   * Sets the useHost to the specified host.
+   * Sets the focus to the specified host.
    *
    * @param host the host to set the focus to
    * @return status message
@@ -69,7 +91,7 @@ public class HostCommands implements CommandMarker {
   }
 
   /**
-   * Checks whether the hostComponents command is available or not.
+   * Checks whether the host components command is available or not.
    *
    * @return true if available false otherwise
    */
@@ -79,7 +101,7 @@ public class HostCommands implements CommandMarker {
   }
 
   /**
-   * Prints the components which belongs to the host previously set the focus on.
+   * Prints the components which belongs to the host being focused on.
    *
    * @return list of host components
    */

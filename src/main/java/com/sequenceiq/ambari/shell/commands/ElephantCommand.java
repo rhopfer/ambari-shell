@@ -25,16 +25,29 @@ import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.shell.AmbariShell;
 
+/**
+ * Draws an elephant to the console.
+ */
 @Component
-public class HelloWorldCommands implements CommandMarker {
+public class ElephantCommand implements CommandMarker {
 
-  @CliAvailabilityIndicator("hw simple")
+  /**
+   * Checks whether the hello command is available or not.
+   *
+   * @return true if available false otherwise
+   */
+  @CliAvailabilityIndicator("hello")
   public boolean isCommandAvailable() {
     return true;
   }
 
-  @CliCommand(value = "hello", help = "Prints a simple hello world message")
+  /**
+   * Prints an elephant to the console.
+   *
+   * @return elephant
+   */
+  @CliCommand(value = "hello", help = "Prints a simple elephant to the console")
   public String simple() {
-    return FileUtils.readBanner(AmbariShell.class, "banner.txt");
+    return FileUtils.readBanner(AmbariShell.class, "elephant.txt");
   }
 }

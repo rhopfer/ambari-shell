@@ -39,22 +39,44 @@ public class AmbariContext {
     this.cluster = client.getClusterName();
   }
 
+  /**
+   * Sets the cluster name if exists.
+   */
   public void connectCluster() {
     this.cluster = client.getClusterName();
   }
 
+  /**
+   * Sets the focus to the root.
+   */
   public void resetFocus() {
     this.focus = getRootFocus();
   }
 
+  /**
+   * Sets the focus.
+   *
+   * @param id   target of the focus, can be anything (blueprint id, host id..)
+   * @param type type of the focus
+   */
   public void setFocus(String id, FocusType type) {
     this.focus = new Focus(id, type);
   }
 
+  /**
+   * Returns the target of the focus.
+   *
+   * @return target
+   */
   public String getFocusValue() {
     return focus.getValue();
   }
 
+  /**
+   * Returns the context sensitive prompt.
+   *
+   * @return text of the prompt
+   */
   public String getPrompt() {
     return focus.isType(FocusType.ROOT) ?
       isConnectedToCluster() ? formatPrompt(focus.getPrefix(), cluster) : "ambari-shell>" :
@@ -65,18 +87,38 @@ public class AmbariContext {
     return cluster != null;
   }
 
+  /**
+   * Checks whether the focus is on the host or not.
+   *
+   * @return true if the focus is on a host false otherwise
+   */
   public boolean isFocusOnHost() {
     return isFocusOn(FocusType.HOST);
   }
 
+  /**
+   * Checks whether the focus is on the cluster build or not.
+   *
+   * @return true if the focus is on a cluster build false otherwise
+   */
   public boolean isFocusOnClusterBuild() {
     return isFocusOn(FocusType.CLUSTER_BUILD);
   }
 
+  /**
+   * Returns some context sensitive hint.
+   *
+   * @return hint
+   */
   public String getHint() {
     return focus.getHint();
   }
 
+  /**
+   * Returns the name of the cluster.
+   *
+   * @return cluster's name
+   */
   public String getCluster() {
     return cluster;
   }

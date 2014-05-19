@@ -37,6 +37,9 @@ import org.springframework.shell.converters.StaticFieldConverterImpl;
 import org.springframework.shell.converters.StringConverter;
 import org.springframework.shell.core.Converter;
 
+/**
+ * Configures the converters used by the shell.
+ */
 @Configuration
 public class ConverterConfiguration {
 

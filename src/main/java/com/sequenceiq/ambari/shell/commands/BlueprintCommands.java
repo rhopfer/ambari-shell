@@ -1,3 +1,20 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.sequenceiq.ambari.shell.commands;
 
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMultiValueMap;
@@ -18,6 +35,11 @@ import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
 
+/**
+ * Blueprint related commands used in the shell.
+ *
+ * @see com.sequenceiq.ambari.client.AmbariClient
+ */
 @Component
 public class BlueprintCommands implements CommandMarker {
 
@@ -48,22 +70,46 @@ public class BlueprintCommands implements CommandMarker {
     return renderSingleMap(client.getBlueprintsMap(), "BLUEPRINT", "STACK");
   }
 
+  /**
+   * Checks whether the blueprint show command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator(value = "blueprint show")
   public boolean isBlueprintShowCommandAvailable() {
     return true;
   }
 
+  /**
+   * Shows the requested blueprint's details.
+   *
+   * @param id id of the blueprint
+   * @return blueprint as formatted table
+   */
   @CliCommand(value = "blueprint show", help = "Shows the blueprint by its id")
   public String showBlueprint(
     @CliOption(key = "id", mandatory = true, help = "Id of the blueprint") String id) {
     return renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT");
   }
 
+  /**
+   * Checks whether the blueprint add command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator(value = "blueprint add")
   public boolean isBlueprintAddCommandAvailable() {
     return true;
   }
 
+  /**
+   * Adds a blueprint to the Ambari server either through an URL or from a file.
+   * If both specified the file takes precedence.
+   *
+   * @param url  -optional, URL containing the blueprint json
+   * @param file - optional, file containing the blueprint json
+   * @return status message
+   */
   @CliCommand(value = "blueprint add", help = "Add a new blueprint with either --url or --file")
   public String addBlueprint(
     @CliOption(key = "url", mandatory = false, help = "URL of the blueprint to download from") String url,
@@ -72,11 +118,21 @@ public class BlueprintCommands implements CommandMarker {
     return client.addBlueprint(json) ? "Blueprint added" : "Cannot add blueprint";
   }
 
+  /**
+   * Checks whether the blueprint defaults command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator(value = "blueprint defaults")
   public boolean isBlueprintDefaultsAddCommandAvailable() {
     return true;
   }
 
+  /**
+   * Adds two default blueprints to the Ambari server.
+   *
+   * @return status message
+   */
   @CliCommand(value = "blueprint defaults", help = "Adds the default blueprints to Ambari")
   public String addBlueprint() {
     return client.addDefaultBlueprints() ? "Default blueprints added" : "Failed to add default blueprints";

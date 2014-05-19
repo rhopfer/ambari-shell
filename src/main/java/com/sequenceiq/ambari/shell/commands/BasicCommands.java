@@ -31,7 +31,7 @@ import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 /**
- * Commands used in the shell. Does nothing more than executing and delegating the commands
+ * Basic commands used in the shell. Delegating the commands
  * to the Ambari Server via a Groovy based client.
  *
  * @see com.sequenceiq.ambari.client.AmbariClient
@@ -71,7 +71,7 @@ public class BasicCommands implements CommandMarker {
   }
 
   /**
-   * Checks whether the services command is available or not.
+   * Checks whether the service list command is available or not.
    *
    * @return true if available false otherwise
    */
@@ -81,7 +81,7 @@ public class BasicCommands implements CommandMarker {
   }
 
   /**
-   * Prints the available services of the Ambari Server.
+   * Prints the available service list of the Ambari Server.
    *
    * @return service list
    */
@@ -91,7 +91,7 @@ public class BasicCommands implements CommandMarker {
   }
 
   /**
-   * Checks whether the serviceComponents command is available or not.
+   * Checks whether the service components command is available or not.
    *
    * @return true if available false otherwise
    */
@@ -152,11 +152,21 @@ public class BasicCommands implements CommandMarker {
     return "debug disabled";
   }
 
+  /**
+   * Checks whether the hint command is available or not.
+   *
+   * @return true if available false otherwise
+   */
   @CliAvailabilityIndicator("hint")
   public boolean isHintCommandAvailable() {
     return true;
   }
 
+  /**
+   * Provides some hints what you can do in the current context.
+   *
+   * @return hint message
+   */
   @CliCommand(value = "hint", help = "Shows some hints")
   public String hint() {
     return context.getHint();
