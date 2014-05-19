@@ -61,7 +61,7 @@ public class ClusterCommands implements CommandMarker {
    * @return true if available false otherwise
    */
   @CliAvailabilityIndicator("cluster build")
-  public boolean isFocusBlueprintCommandAvailable() {
+  public boolean isClusterBuildCommandAvailable() {
     return !context.isConnectedToCluster();
   }
 
@@ -73,7 +73,7 @@ public class ClusterCommands implements CommandMarker {
    * @return prints the blueprint as formatted table if exists, otherwise error message
    */
   @CliCommand(value = "cluster build", help = "Starts to build a cluster")
-  public String focusBlueprint(
+  public String buildCluster(
     @CliOption(key = "blueprint", mandatory = true, help = "Id of the blueprint, use 'blueprints' command to see the list") String id) {
     String message = "Not a valid blueprint id";
     if (client.doesBlueprintExists(id)) {
@@ -115,7 +115,7 @@ public class ClusterCommands implements CommandMarker {
    * @return true if available false otherwise
    */
   @CliAvailabilityIndicator("cluster preview")
-  public boolean isAssignShowCommandAvailable() {
+  public boolean isClusterPreviewCommandAvailable() {
     return context.isFocusOnClusterBuild();
   }
 

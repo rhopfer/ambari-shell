@@ -15,41 +15,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sequenceiq.ambari.shell.customization;
+package com.sequenceiq.ambari.shell.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sequenceiq.ambari.shell.model.AmbariContext;
+import com.sequenceiq.ambari.client.AmbariClient;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AmbariPromptTest {
+public class AmbariContextTest {
 
   @InjectMocks
-  private AmbariPrompt prompt;
+  private AmbariContext ambariContext;
 
   @Mock
-  private AmbariContext context;
+  private AmbariClient ambariClient;
 
   @Test
-  public void testGetProviderName() {
-    String result = prompt.getProviderName();
+  public void testGetPromptForRoot() {
+    ReflectionTestUtils.setField(ambariContext, "cluster", "single-node");
 
-    assertEquals(AmbariPrompt.class.getSimpleName(), result);
+    String result = ambariContext.getPrompt();
+
+    assertEquals(FocusType.ROOT.prefix() + ":single-node>", result);
   }
 
   @Test
-  public void testGetPrompt(){
-    when(context.getPrompt()).thenReturn("prompt");
+  public void testGetPromptForRootButNotConnected() {
+    ReflectionTestUtils.setField(ambariContext, "cluster", null);
 
-    String result = prompt.getPrompt();
+    String result = ambariContext.getPrompt();
 
-    assertEquals("prompt", result);
+    assertEquals("ambari-shell>", result);
+  }
+
+  @Test
+  public void testGetPromptForFocus() {
+    ReflectionTestUtils.setField(ambariContext, "cluster", "single-node");
+    ReflectionTestUtils.setField(ambariContext, "focus", new Focus("target", FocusType.HOST));
+
+    String result = ambariContext.getPrompt();
+
+    assertEquals(String.format("%s:%s>", FocusType.HOST.prefix(), "target"), result);
   }
 }

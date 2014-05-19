@@ -76,7 +76,7 @@ public class BasicCommands implements CommandMarker {
    * @return true if available false otherwise
    */
   @CliAvailabilityIndicator("service list")
-  public boolean isServicesCommandAvailable() {
+  public boolean isServiceListCommandAvailable() {
     return context.isConnectedToCluster();
   }
 
@@ -86,7 +86,7 @@ public class BasicCommands implements CommandMarker {
    * @return service list
    */
   @CliCommand(value = "service list", help = "Lists the available services")
-  public String services() {
+  public String servicesList() {
     return renderSingleMap(client.getServicesMap(), "SERVICE", "STATE");
   }
 

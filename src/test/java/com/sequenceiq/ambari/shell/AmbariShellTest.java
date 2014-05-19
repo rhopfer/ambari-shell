@@ -44,13 +44,10 @@ public class AmbariShellTest {
 
   @Test
   public void testRun() throws Exception {
-    // GIVEN
     when(commandLine.getShellCommandsToExecute()).thenReturn(null);
 
-    // WHEN
     shell.run();
 
-    // THEN
     verify(shellComponent).start();
     verify(shellComponent).promptLoop();
     verify(shellComponent).waitForComplete();
@@ -58,13 +55,10 @@ public class AmbariShellTest {
 
   @Test
   public void testRunForNullExitCodeRequest() throws Exception {
-    // GIVEN
     when(commandLine.getShellCommandsToExecute()).thenReturn(null);
 
-    // WHEN
     shell.run();
 
-    // THEN
     verify(shellComponent).start();
     verify(shellComponent).promptLoop();
     verify(shellComponent).waitForComplete();
