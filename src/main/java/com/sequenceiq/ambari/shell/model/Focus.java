@@ -41,10 +41,6 @@ public class Focus {
     return value;
   }
 
-  public String getHint() {
-    return type.hint();
-  }
-
   /**
    * Checks if the current focus exists with the provided one.
    *

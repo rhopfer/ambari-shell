@@ -17,19 +17,24 @@
  */
 package com.sequenceiq.ambari.shell.model;
 
-public enum FocusType {
+/**
+ * Provides some guidance's to the user, what he/she can follow.
+ */
+public enum Hints {
 
-  HOST("HOST"),
-  CLUSTER_BUILD("CLUSTER_BUILD"),
-  ROOT("CLUSTER");
+  ADD_BLUEPRINT("Add a blueprint with the 'blueprint add' or add the default blueprints with the 'blueprint defaults' command."),
+  BUILD_CLUSTER("Start building a cluster with the 'cluster build' command using a previously added blueprint."),
+  ASSIGN_HOSTS("Assign hosts to different host groups with the 'cluster assign' command."),
+  CREATE_CLUSTER("Create the cluster with the 'cluster create' command or use the 'cluster reset' command and start over."),
+  PROGRESS("See the install progress with the 'tasks' command.");
 
-  private final String prefix;
+  private final String message;
 
-  private FocusType(String prefix) {
-    this.prefix = prefix;
+  private Hints(String message) {
+    this.message = message;
   }
 
-  public String prefix() {
-    return prefix;
+  public String message() {
+    return message;
   }
 }

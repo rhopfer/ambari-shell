@@ -34,6 +34,8 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.model.AmbariContext;
+import com.sequenceiq.ambari.shell.model.Hints;
 
 import groovyx.net.http.HttpResponseException;
 
@@ -46,10 +48,12 @@ import groovyx.net.http.HttpResponseException;
 public class BlueprintCommands implements CommandMarker {
 
   private AmbariClient client;
+  private AmbariContext context;
 
   @Autowired
-  public BlueprintCommands(AmbariClient client) {
+  public BlueprintCommands(AmbariClient client, AmbariContext context) {
     this.client = client;
+    this.context = context;
   }
 
   /**
@@ -59,7 +63,7 @@ public class BlueprintCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator("blueprint list")
   public boolean isBlueprintListCommandAvailable() {
-    return true;
+    return context.areBlueprintsAvailable();
   }
 
   /**
@@ -79,7 +83,7 @@ public class BlueprintCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator(value = "blueprint show")
   public boolean isBlueprintShowCommandAvailable() {
-    return true;
+    return context.areBlueprintsAvailable();
   }
 
   /**
@@ -122,6 +126,8 @@ public class BlueprintCommands implements CommandMarker {
       if (json != null) {
         client.addBlueprint(json);
         message = "Blueprint added";
+        context.setHint(Hints.BUILD_CLUSTER);
+        context.setBlueprintsAvailable();
       } else {
         message = "No blueprint specified";
       }
@@ -138,7 +144,7 @@ public class BlueprintCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator(value = "blueprint defaults")
   public boolean isBlueprintDefaultsAddCommandAvailable() {
-    return true;
+    return !context.areBlueprintsAvailable();
   }
 
   /**
@@ -151,6 +157,8 @@ public class BlueprintCommands implements CommandMarker {
     String message = "Default blueprints added";
     try {
       client.addDefaultBlueprints();
+      context.setHint(Hints.BUILD_CLUSTER);
+      context.setBlueprintsAvailable();
     } catch (HttpResponseException e) {
       message = "Failed to add default blueprints: " + e.getMessage();
     }

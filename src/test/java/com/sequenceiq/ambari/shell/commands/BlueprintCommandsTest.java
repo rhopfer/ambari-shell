@@ -35,6 +35,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 import groovyx.net.http.HttpResponseException;
 
@@ -48,6 +49,8 @@ public class BlueprintCommandsTest {
   private AmbariClient ambariClient;
   @Mock
   private HttpResponseException responseException;
+  @Mock
+  private AmbariContext context;
 
   @Test
   public void testAddBlueprintForFileReadPrecedence() throws IOException {

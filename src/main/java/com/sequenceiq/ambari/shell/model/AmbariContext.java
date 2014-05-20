@@ -29,14 +29,17 @@ import com.sequenceiq.ambari.client.AmbariClient;
 public class AmbariContext {
 
   private String cluster;
+  private boolean blueprintsAvailable;
   private Focus focus;
   private AmbariClient client;
+  private Hints hint;
 
   @Autowired
   public AmbariContext(AmbariClient client) {
     this.client = client;
     this.focus = getRootFocus();
     this.cluster = client.getClusterName();
+    checkBlueprints();
   }
 
   /**
@@ -70,6 +73,29 @@ public class AmbariContext {
    */
   public String getFocusValue() {
     return focus.getValue();
+  }
+
+  /**
+   * Checks whether blueprints are available or not.
+   */
+  public boolean areBlueprintsAvailable() {
+    return blueprintsAvailable;
+  }
+
+  /**
+   * Sets the blueprint availability flag to true
+   */
+  public void setBlueprintsAvailable() {
+    blueprintsAvailable = true;
+  }
+
+  /**
+   * Sets what should be the next hint message.
+   *
+   * @param hint the new message
+   */
+  public void setHint(Hints hint) {
+    this.hint = hint;
   }
 
   /**
@@ -111,7 +137,7 @@ public class AmbariContext {
    * @return hint
    */
   public String getHint() {
-    return focus.getHint();
+    return "Hint: " + hint.message();
   }
 
   /**
@@ -133,5 +159,17 @@ public class AmbariContext {
 
   private String formatPrompt(String prefix, String postfix) {
     return String.format("%s:%s>", prefix, postfix);
+  }
+
+  private void checkBlueprints() {
+    if (cluster == null) {
+      if (blueprintsAvailable = client.isBlueprintAvailable()) {
+        hint = Hints.BUILD_CLUSTER;
+      } else {
+        hint = Hints.ADD_BLUEPRINT;
+      }
+    } else {
+      hint = Hints.PROGRESS;
+    }
   }
 }

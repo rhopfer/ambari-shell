@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.FocusType;
+import com.sequenceiq.ambari.shell.model.Hints;
 
 import groovyx.net.http.HttpResponseException;
 
@@ -62,7 +63,7 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator("cluster build")
   public boolean isClusterBuildCommandAvailable() {
-    return !context.isConnectedToCluster();
+    return !context.isConnectedToCluster() && !context.isFocusOnClusterBuild() && context.areBlueprintsAvailable();
   }
 
   /**
@@ -78,6 +79,7 @@ public class ClusterCommands implements CommandMarker {
     String message = "Not a valid blueprint id";
     if (client.doesBlueprintExists(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
+      context.setHint(Hints.ASSIGN_HOSTS);
       message = renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT");
       createNewHostGroups();
     }
@@ -105,6 +107,7 @@ public class ClusterCommands implements CommandMarker {
   public String assign(
     @CliOption(key = "host", mandatory = true, help = "Fully qualified host name") String host,
     @CliOption(key = "hostGroup", mandatory = true, help = "Host group which to assign the host") String group) {
+    context.setHint(Hints.CREATE_CLUSTER);
     return addHostToGroup(host, group) ?
       String.format("%s has been added to %s", host, group) : String.format("%s is not a valid host group", group);
   }
@@ -116,7 +119,7 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator("cluster preview")
   public boolean isClusterPreviewCommandAvailable() {
-    return context.isFocusOnClusterBuild();
+    return context.isFocusOnClusterBuild() && isHostAssigned();
   }
 
   /**
@@ -136,7 +139,7 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator("cluster create")
   public boolean isCreateClusterCommandAvailable() {
-    return context.isFocusOnClusterBuild();
+    return context.isFocusOnClusterBuild() && isHostAssigned();
   }
 
   /**
@@ -153,6 +156,7 @@ public class ClusterCommands implements CommandMarker {
       client.createCluster(blueprint, blueprint, hostGroups);
       context.connectCluster();
       context.resetFocus();
+      context.setHint(Hints.PROGRESS);
     } catch (HttpResponseException e) {
       createNewHostGroups();
       message = "Failed to create the cluster: " + e.getMessage();
@@ -191,6 +195,22 @@ public class ClusterCommands implements CommandMarker {
     return message;
   }
 
+  /**
+   * Checks whether the cluster reset command is available or not.
+   *
+   * @return true if available false otherwise
+   */
+  @CliAvailabilityIndicator(value = "cluster reset")
+  public boolean resetClusterBuild() {
+    return context.isFocusOnClusterBuild() && isHostAssigned();
+  }
+
+  @CliCommand(value = "cluster reset", help = "Clears the host - host group assignments")
+  public void reset() {
+    context.setHint(Hints.ASSIGN_HOSTS);
+    createNewHostGroups();
+  }
+
   private void deleteCluster(String id) throws HttpResponseException {
     client.deleteCluster(id);
   }
@@ -210,6 +230,17 @@ public class ClusterCommands implements CommandMarker {
       result = false;
     } else {
       hosts.add(host);
+    }
+    return result;
+  }
+
+  private boolean isHostAssigned() {
+    boolean result = false;
+    for (String group : hostGroups.keySet()) {
+      if (!hostGroups.get(group).isEmpty()) {
+        result = true;
+        break;
+      }
     }
     return result;
   }
