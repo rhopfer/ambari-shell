@@ -85,6 +85,7 @@ public class ClusterCommandsTest {
   public void testAssignForInvalidHostGroup() {
     Map<String, List<String>> map = Collections.singletonMap("group1", Arrays.asList("host", "host2"));
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
+    ReflectionTestUtils.setField(clusterCommands, "hostNames", Arrays.asList("host3"));
 
     String result = clusterCommands.assign("host3", "group0");
 
@@ -96,6 +97,7 @@ public class ClusterCommandsTest {
     Map<String, List<String>> map = new HashMap<String, List<String>>();
     map.put("group1", new ArrayList<String>());
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
+    ReflectionTestUtils.setField(clusterCommands, "hostNames", Arrays.asList("host3"));
 
     String result = clusterCommands.assign("host3", "group1");
 

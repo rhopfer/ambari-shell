@@ -54,7 +54,7 @@ public class HostCommands implements CommandMarker {
    */
   @CliAvailabilityIndicator("host list")
   public boolean isHostsCommandAvailable() {
-    return context.isConnectedToCluster();
+    return true;
   }
 
   /**
