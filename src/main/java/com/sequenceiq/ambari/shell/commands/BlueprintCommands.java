@@ -116,10 +116,15 @@ public class BlueprintCommands implements CommandMarker {
   public String addBlueprint(
     @CliOption(key = "url", mandatory = false, help = "URL of the blueprint to download from") String url,
     @CliOption(key = "file", mandatory = false, help = "File which contains the blueprint") File file) {
-    String json = file == null ? readContent(url) : readContent(file);
-    String message = "Blueprint added";
+    String message;
     try {
-      client.addBlueprint(json);
+      String json = file == null ? readContent(url) : readContent(file);
+      if (json != null) {
+        client.addBlueprint(json);
+        message = "Blueprint added";
+      } else {
+        message = "No blueprint specified";
+      }
     } catch (HttpResponseException e) {
       message = "Cannot add blueprint: " + e.getMessage();
     }

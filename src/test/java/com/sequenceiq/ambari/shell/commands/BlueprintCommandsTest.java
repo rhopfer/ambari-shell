@@ -17,7 +17,9 @@
  */
 package com.sequenceiq.ambari.shell.commands;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -75,6 +77,14 @@ public class BlueprintCommandsTest {
     blueprintCommands.addBlueprint();
 
     verify(ambariClient).addDefaultBlueprints();
+  }
+
+  @Test
+  public void testAddBlueprintForUnspecifiedValue() throws HttpResponseException {
+    String response = blueprintCommands.addBlueprint(null, null);
+
+    assertEquals("No blueprint specified", response);
+    verify(ambariClient, times(0)).addBlueprint(null);
   }
 
   @Test
