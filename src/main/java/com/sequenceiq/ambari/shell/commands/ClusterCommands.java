@@ -49,7 +49,6 @@ public class ClusterCommands implements CommandMarker {
   private AmbariClient client;
   private AmbariContext context;
   private Map<String, List<String>> hostGroups;
-  private List<String> hostNames;
 
   @Autowired
   public ClusterCommands(AmbariClient client, AmbariContext context) {
@@ -109,7 +108,7 @@ public class ClusterCommands implements CommandMarker {
     @CliOption(key = "host", mandatory = true, help = "Fully qualified host name") String host,
     @CliOption(key = "hostGroup", mandatory = true, help = "Host group which to assign the host") String group) {
     String message;
-    if (hostNames.contains(host)) {
+    if (client.getHostNames().contains(host)) {
       if (addHostToGroup(host, group)) {
         context.setHint(Hints.CREATE_CLUSTER);
         message = String.format("%s has been added to %s", host, group);
@@ -231,7 +230,6 @@ public class ClusterCommands implements CommandMarker {
       groups.put(hostGroup, new ArrayList<String>());
     }
     this.hostGroups = groups;
-    this.hostNames = client.getHostNames();
   }
 
   private boolean addHostToGroup(String host, String group) {
