@@ -17,7 +17,7 @@
  */
 package com.sequenceiq.ambari.shell.commands;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -46,7 +46,7 @@ public class HostCommandsTest {
 
   @Test
   public void testFocusHostForValidHost() {
-    when(client.getHostNames()).thenReturn(asList("host1"));
+    when(client.getHostNames()).thenReturn(singletonMap("host1", "HEALTHY"));
 
     String result = hostCommands.focusHost("host1");
 
@@ -56,7 +56,7 @@ public class HostCommandsTest {
 
   @Test
   public void testFocusHostForInvalidHost() {
-    when(client.getHostNames()).thenReturn(asList("host12"));
+    when(client.getHostNames()).thenReturn(singletonMap("host3", "HEALTHY"));
 
     String result = hostCommands.focusHost("host1");
 

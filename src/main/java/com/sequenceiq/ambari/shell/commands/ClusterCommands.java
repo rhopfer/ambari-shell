@@ -18,6 +18,7 @@
 package com.sequenceiq.ambari.shell.commands;
 
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMultiValueMap;
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,12 +77,16 @@ public class ClusterCommands implements CommandMarker {
   @CliCommand(value = "cluster build", help = "Starts to build a cluster")
   public String buildCluster(
     @CliOption(key = "blueprint", mandatory = true, help = "Id of the blueprint, use 'blueprints' command to see the list") String id) {
-    String message = "Not a valid blueprint id";
+    String message;
     if (client.doesBlueprintExists(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
       context.setHint(Hints.ASSIGN_HOSTS);
-      message = renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT");
+      message = String.format("%s\n%s",
+        renderSingleMap(client.getHostNames(), "HOSTNAME", "STATE"),
+        renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT"));
       createNewHostGroups();
+    } else {
+      message = "Not a valid blueprint id";
     }
     return message;
   }
@@ -108,7 +113,7 @@ public class ClusterCommands implements CommandMarker {
     @CliOption(key = "host", mandatory = true, help = "Fully qualified host name") String host,
     @CliOption(key = "hostGroup", mandatory = true, help = "Host group which to assign the host") String group) {
     String message;
-    if (client.getHostNames().contains(host)) {
+    if (client.getHostNames().keySet().contains(host)) {
       if (addHostToGroup(host, group)) {
         context.setHint(Hints.CREATE_CLUSTER);
         message = String.format("%s has been added to %s", host, group);

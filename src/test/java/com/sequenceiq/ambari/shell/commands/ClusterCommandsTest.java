@@ -18,6 +18,7 @@
 package com.sequenceiq.ambari.shell.commands;
 
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMultiValueMap;
+import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonMap;
@@ -103,24 +104,27 @@ public class ClusterCommandsTest {
 
   @Test
   public void testBuildCluster() {
+    Map<String, String> hostNames = singletonMap("host1", "HEALTHY");
     Map<String, List<String>> map = singletonMap("group1", asList("comp1", "comp2"));
     when(client.doesBlueprintExists("id")).thenReturn(true);
     when(client.getBlueprintMap("id")).thenReturn(map);
     when(context.getFocusValue()).thenReturn("id");
+    when(client.getHostNames()).thenReturn(hostNames);
 
     String result = clusterCommands.buildCluster("id");
 
     verify(client).doesBlueprintExists("id");
     verify(client).getBlueprintMap("id");
     verify(client).getHostGroups("id");
-    assertEquals(renderMultiValueMap(map, "HOSTGROUP", "COMPONENT"), result);
+    assertEquals(String.format("%s\n%s", renderSingleMap(hostNames, "HOSTNAME", "STATE"),
+      renderMultiValueMap(map, "HOSTGROUP", "COMPONENT")), result);
   }
 
   @Test
   public void testAssignForInvalidHostGroup() {
     Map<String, List<String>> map = singletonMap("group1", asList("host", "host2"));
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
-    when(client.getHostNames()).thenReturn(asList("host3"));
+    when(client.getHostNames()).thenReturn(singletonMap("host3", "HEALTHY"));
 
     String result = clusterCommands.assign("host3", "group0");
 
@@ -132,7 +136,7 @@ public class ClusterCommandsTest {
     Map<String, List<String>> map = new HashMap<String, List<String>>();
     map.put("group1", new ArrayList<String>());
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
-    when(client.getHostNames()).thenReturn(asList("host3"));
+    when(client.getHostNames()).thenReturn(singletonMap("host3", "HEALTHY"));
 
     String result = clusterCommands.assign("host3", "group1");
 
@@ -144,7 +148,7 @@ public class ClusterCommandsTest {
     Map<String, List<String>> map = new HashMap<String, List<String>>();
     map.put("group1", new ArrayList<String>());
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
-    when(client.getHostNames()).thenReturn(asList("host2"));
+    when(client.getHostNames()).thenReturn(singletonMap("host2", "HEALTHY"));
 
     String result = clusterCommands.assign("host3", "group1");
 

@@ -87,7 +87,7 @@ public class HostCommands implements CommandMarker {
   public String focusHost(
     @CliOption(key = "host", mandatory = true, help = "hostname") String host) {
     String message;
-    if (client.getHostNames().contains(host)) {
+    if (client.getHostNames().keySet().contains(host)) {
       context.setFocus(host, FocusType.HOST);
       message = "Focus set to: " + host;
     } else {
