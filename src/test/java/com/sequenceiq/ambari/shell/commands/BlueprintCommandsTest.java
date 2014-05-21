@@ -57,9 +57,10 @@ public class BlueprintCommandsTest {
     File file = new File("src/test/resources/testBlueprint.json");
     String json = IOUtils.toString(new FileInputStream(file));
 
-    blueprintCommands.addBlueprint("url", file);
+    String result = blueprintCommands.addBlueprint("url", file);
 
     verify(ambariClient).addBlueprint(json);
+    assertEquals("Blueprint added", result);
   }
 
   @Test
@@ -69,17 +70,19 @@ public class BlueprintCommandsTest {
     doThrow(responseException).when(ambariClient).addBlueprint(json);
     when(responseException.getMessage()).thenReturn("error");
 
-    blueprintCommands.addBlueprint("url", file);
+    String result = blueprintCommands.addBlueprint("url", file);
 
     verify(ambariClient).addBlueprint(json);
     verify(responseException).getMessage();
+    assertEquals("Cannot add blueprint: error", result);
   }
 
   @Test
   public void testAddBlueprintForDefaults() throws HttpResponseException {
-    blueprintCommands.addBlueprint();
+    String result = blueprintCommands.addBlueprint();
 
     verify(ambariClient).addDefaultBlueprints();
+    assertEquals("Default blueprints added", result);
   }
 
   @Test
@@ -95,9 +98,9 @@ public class BlueprintCommandsTest {
     doThrow(responseException).when(ambariClient).addDefaultBlueprints();
     when(responseException.getMessage()).thenReturn("error");
 
-    blueprintCommands.addBlueprint();
+    String result = blueprintCommands.addBlueprint();
 
     verify(responseException).getMessage();
+    assertEquals("Failed to add default blueprints: error", result);
   }
-
 }

@@ -18,6 +18,9 @@
 package com.sequenceiq.ambari.shell.commands;
 
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMultiValueMap;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -26,8 +29,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,17 +59,51 @@ public class ClusterCommandsTest {
   private HttpResponseException responseException;
 
   @Test
+  public void testIsClusterBuildCommandAvailable() {
+    when(context.isConnectedToCluster()).thenReturn(false);
+    when(context.isFocusOnClusterBuild()).thenReturn(false);
+    when(context.areBlueprintsAvailable()).thenReturn(true);
+
+    boolean result = clusterCommands.isClusterBuildCommandAvailable();
+
+    assertTrue(result);
+  }
+
+  @Test
+  public void testIsClusterBuildCommandAvailableAndFocusOnBuild() {
+    when(context.isConnectedToCluster()).thenReturn(false);
+    when(context.isFocusOnClusterBuild()).thenReturn(true);
+    when(context.areBlueprintsAvailable()).thenReturn(true);
+
+    boolean result = clusterCommands.isClusterBuildCommandAvailable();
+
+    assertFalse(result);
+  }
+
+  @Test
+  public void testIsClusterBuildCommandAvailableAndNoBlueprints() {
+    when(context.isConnectedToCluster()).thenReturn(false);
+    when(context.isFocusOnClusterBuild()).thenReturn(false);
+    when(context.areBlueprintsAvailable()).thenReturn(false);
+
+    boolean result = clusterCommands.isClusterBuildCommandAvailable();
+
+    assertFalse(result);
+  }
+
+  @Test
   public void testBuildClusterForNonExistingBlueprint() {
     when(client.doesBlueprintExists("id")).thenReturn(false);
 
-    clusterCommands.buildCluster("id");
+    String result = clusterCommands.buildCluster("id");
 
     verify(client).doesBlueprintExists("id");
+    assertEquals("Not a valid blueprint id", result);
   }
 
   @Test
   public void testBuildCluster() {
-    Map<String, List<String>> map = Collections.singletonMap("group1", Arrays.asList("comp1", "comp2"));
+    Map<String, List<String>> map = singletonMap("group1", asList("comp1", "comp2"));
     when(client.doesBlueprintExists("id")).thenReturn(true);
     when(client.getBlueprintMap("id")).thenReturn(map);
     when(context.getFocusValue()).thenReturn("id");
@@ -83,9 +118,9 @@ public class ClusterCommandsTest {
 
   @Test
   public void testAssignForInvalidHostGroup() {
-    Map<String, List<String>> map = Collections.singletonMap("group1", Arrays.asList("host", "host2"));
+    Map<String, List<String>> map = singletonMap("group1", asList("host", "host2"));
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
-    when(client.getHostNames()).thenReturn(Arrays.asList("host3"));
+    when(client.getHostNames()).thenReturn(asList("host3"));
 
     String result = clusterCommands.assign("host3", "group0");
 
@@ -97,7 +132,7 @@ public class ClusterCommandsTest {
     Map<String, List<String>> map = new HashMap<String, List<String>>();
     map.put("group1", new ArrayList<String>());
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
-    when(client.getHostNames()).thenReturn(Arrays.asList("host3"));
+    when(client.getHostNames()).thenReturn(asList("host3"));
 
     String result = clusterCommands.assign("host3", "group1");
 
@@ -109,7 +144,7 @@ public class ClusterCommandsTest {
     Map<String, List<String>> map = new HashMap<String, List<String>>();
     map.put("group1", new ArrayList<String>());
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
-    when(client.getHostNames()).thenReturn(Arrays.asList("host2"));
+    when(client.getHostNames()).thenReturn(asList("host2"));
 
     String result = clusterCommands.assign("host3", "group1");
 
@@ -119,7 +154,7 @@ public class ClusterCommandsTest {
   @Test
   public void testCreateClusterForException() throws HttpResponseException {
     String blueprint = "blueprint";
-    Map<String, List<String>> map = Collections.singletonMap("group1", Arrays.asList("host", "host2"));
+    Map<String, List<String>> map = singletonMap("group1", asList("host", "host2"));
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
     when(context.getFocusValue()).thenReturn(blueprint);
     doThrow(responseException).when(client).createCluster(blueprint, blueprint, map);
@@ -136,7 +171,7 @@ public class ClusterCommandsTest {
   @Test
   public void testCreateCluster() throws HttpResponseException {
     String blueprint = "blueprint";
-    Map<String, List<String>> map = Collections.singletonMap("group1", Arrays.asList("host", "host2"));
+    Map<String, List<String>> map = singletonMap("group1", asList("host", "host2"));
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
     when(context.getFocusValue()).thenReturn(blueprint);
     when(client.getClusterName()).thenReturn("cluster");
@@ -174,5 +209,35 @@ public class ClusterCommandsTest {
     verify(client).deleteCluster("cluster");
     verify(context).getCluster();
     assertEquals("Successfully deleted the cluster", result);
+  }
+
+  @Test
+  public void testIsClusterPreviewCommandAvailable() {
+    when(context.isFocusOnClusterBuild()).thenReturn(true);
+    ReflectionTestUtils.setField(clusterCommands, "hostGroups", singletonMap("group1", asList("host1")));
+
+    boolean result = clusterCommands.isClusterPreviewCommandAvailable();
+
+    assertTrue(result);
+  }
+
+  @Test
+  public void testIsClusterPreviewCommandAvailableForNoAssignments() {
+    when(context.isFocusOnClusterBuild()).thenReturn(true);
+    ReflectionTestUtils.setField(clusterCommands, "hostGroups", singletonMap("group1", emptyList()));
+
+    boolean result = clusterCommands.isClusterPreviewCommandAvailable();
+
+    assertFalse(result);
+  }
+
+  @Test
+  public void testIsClusterResetCommandAvailable() {
+    when(context.isFocusOnClusterBuild()).thenReturn(true);
+    ReflectionTestUtils.setField(clusterCommands, "hostGroups", singletonMap("group1", asList("host1")));
+
+    boolean result = clusterCommands.isClusterResetCommandAvailable();
+
+    assertTrue(result);
   }
 }

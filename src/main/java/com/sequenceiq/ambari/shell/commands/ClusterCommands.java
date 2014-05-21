@@ -210,7 +210,7 @@ public class ClusterCommands implements CommandMarker {
    * @return true if available false otherwise
    */
   @CliAvailabilityIndicator(value = "cluster reset")
-  public boolean resetClusterBuild() {
+  public boolean isClusterResetCommandAvailable() {
     return context.isFocusOnClusterBuild() && isHostAssigned();
   }
 
