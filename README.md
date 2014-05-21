@@ -66,45 +66,99 @@ Your first command is `connect` to be able to attach the shell to a cluster.
 
 Welcome to Ambari Shell. For assistance press TAB
 
-ambari-shell>connect --host localhost --port 49156
-MySingleNodeCluster >
+ambari-shell>connect --host localhost --port 8080
+ambari-shell>
 ```
 
-Watch how the *prompt* shows the actual *context*
 
 ## Implemented Commands
 
-Right now only non-invasive commands are implemented:
-- **tasks**: list tasks and their status. By default it shows the tasks for the
-  first Request. You can specify the second request via the `--id 2` optional parameter.
-- **hosts**: lists hosts connected to ambari server
-- **services**: list services in the actual cluster with their status
-- **serviceComponents**: list all ServiceComponents and their status
-- **blueprints**: list available blueprints
+- **blueprint add** - Add a new blueprint with either --url or --file
+- **blueprint defaults** - Adds the default blueprints to Ambari
+- **blueprint list** - Lists all known blueprints
+- **blueprint show** - Shows the blueprint by its id
+- **cluster assign** - Assign host to host group
+- **cluster build** - Starts to build a cluster
+- **cluster create** - Create a cluster based on current blueprint and assigned hosts
+- **cluster delete** - Delete the cluster
+- **cluster preview** - Shows the currently assigned hosts
+- **cluster reset** - Clears the host - host group assignments
+- **debug off** - Stops showing the URL of the API calls
+- **debug on** - Shows the URL of the API calls
+- **exit** - Exits the shell
+- **hello** - Prints a simple elephant to the console
+- **help** - List all commands usage
+- **hint** - Shows some hints
+- **host components** - Lists the components assigned to the selected host
+- **host focus** - Sets the useHost to the specified host
+- **host list** - Lists the available hosts
+- **quit** - Exits the shell
+- **script** - Parses the specified resource file and executes its commands
+- **service components** - Lists all services with their components
+- **service list** - Lists the available services
+- **tasks** - Lists the Ambari tasks
+- **version** - Displays shell version
 
-## Context sensitive commands
+Please note that all commands are context aware - and are available only when it makes sense. 
+For example the **cluster create** command is not available until a **blueprint** has not been added or selected. 
+A good approach is to use the **hint** command - as the AMbari UI, this will give you hints about the available commands and the flow of creating or configuring a cluster.
 
-This shows commands available only if it makes sense in the actual *context*.
-To change the actual context use the `focus` command. Right now it understands
-only hostnames.
+*You can always use TAB for completion or available parameters.*
 
-`focus` will also change the promt, and you can use the `hostComponents` command
-to list service components and their status on the selected host.
+Example:
 
+Once you logged in you can say **hello**.
+
+                    .-.._
+              __  /`     '.
+           .-'  `/   (   a \
+          /      (    \,_   \
+         /|       '---` |\ =|
+        ` \    /__.-/  /  | |
+           |  / / \ \  \   \_\
+           |__|_|  |_|__\
+
+Initially there are no blueprints available - you cn add blueprints from file or URL. For your convenience we have added 2 blueprints as defaults. 
+You can get these blueprints by using the `blueprint defaults` command. The result is the following:
 ```
-MySingleNodeCluster >focus --host server.ambari.com
-MySingleNodeCluster/ambari.vmati.com >hostComponents
-DATANODE                       [INSTALLED]
-GANGLIA_MONITOR                [INSTALLED]
-GANGLIA_SERVER                 [INSTALLED]
-HDFS_CLIENT                    [INSTALLED]
-HISTORYSERVER                  [INSTALLED]
-MAPREDUCE2_CLIENT              [INSTALLED]
-NAMENODE                       [INSTALLED]
-NODEMANAGER                    [INSTALLED]
-RESOURCEMANAGER                [INSTALLED]
-SECONDARY_NAMENODE             [INSTALLED]
-YARN_CLIENT                    [INSTALLED]
-ZOOKEEPER_CLIENT               [INSTALLED]
-ZOOKEEPER_SERVER               [INSTALLED]
+  BLUEPRINT              STACK
+  ---------------------  -------
+  multi-node-hdfs-yarn   HDP:2.0
+  single-node-hdfs-yarn  HDP:2.0
 ```
+
+Once the blueprints are available you can use them to create a cluster. You can use the following command: `cluster build --blueprint single-node-hdfs-yarn`. 
+Now that the blueprint is selected you have to assign the hosts to the available host groups. 
+Use `cluster assign --hostGroup host_group_1 --host server.ambari.com`. 
+
+You can always `cluster reset` or `cluster preview` to modify or check the configuration. 
+```
+HOSTGROUP     HOST
+  ------------  -----------------
+  host_group_1  server.ambari.com
+```
+
+Once you are happy with you can choose `cluster create` to start building the cluster. Progress can be checked either at Amabri UI or using the `tasks` command.
+```
+  TASK                        STATUS
+  --------------------------  -------
+  HISTORYSERVER INSTALL       QUEUED
+  ZOOKEEPER_SERVER START      PENDING
+  ZOOKEEPER_CLIENT INSTALL    PENDING
+  HDFS_CLIENT INSTALL         PENDING
+  HISTORYSERVER START         PENDING
+  NODEMANAGER INSTALL         QUEUED
+  NODEMANAGER START           PENDING
+  ZOOKEEPER_SERVER INSTALL    QUEUED
+  YARN_CLIENT INSTALL         PENDING
+  NAMENODE INSTALL            QUEUED
+  RESOURCEMANAGER INSTALL     QUEUED
+  NAMENODE START              PENDING
+  RESOURCEMANAGER START       PENDING
+  DATANODE START              PENDING
+  SECONDARY_NAMENODE START    PENDING
+  DATANODE INSTALL            QUEUED
+  MAPREDUCE2_CLIENT INSTALL   PENDING
+  SECONDARY_NAMENODE INSTALL  QUEUED
+```
+
