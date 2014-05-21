@@ -107,7 +107,7 @@ A good approach is to use the `hint` command - as the AMbari UI, this will give 
 
 Example:
 
-Once you logged in you can say `hello*`.
+Once you logged in you can say `hello`.
 
                     .-.._
               __  /`     '.
@@ -129,6 +129,7 @@ You can get these blueprints by using the `blueprint defaults` command. The resu
 
 Once the blueprints are available you can use them to create a cluster. You can use the following command: `cluster build --blueprint single-node-hdfs-yarn`. 
 Now that the blueprint is selected you have to assign the hosts to the available host groups. 
+
 Use `cluster assign --hostGroup host_group_1 --host server.ambari.com`. 
 
 You can always `cluster reset` or `cluster preview` to modify or check the configuration. 
