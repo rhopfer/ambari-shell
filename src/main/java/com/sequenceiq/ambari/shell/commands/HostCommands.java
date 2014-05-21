@@ -86,8 +86,14 @@ public class HostCommands implements CommandMarker {
   @CliCommand(value = "host focus", help = "Sets the useHost to the specified host")
   public String focusHost(
     @CliOption(key = "host", mandatory = true, help = "hostname") String host) {
-    context.setFocus(host, FocusType.HOST);
-    return "Focus set to:" + host;
+    String message;
+    if (client.getHostNames().contains(host)) {
+      context.setFocus(host, FocusType.HOST);
+      message = "Focus set to: " + host;
+    } else {
+      message = host + " is not a valid host name";
+    }
+    return message;
   }
 
   /**
