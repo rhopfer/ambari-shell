@@ -100,14 +100,14 @@ ambari-shell>
 - **version** - Displays shell version
 
 Please note that all commands are context aware - and are available only when it makes sense. 
-For example the **cluster create** command is not available until a **blueprint** has not been added or selected. 
-A good approach is to use the **hint** command - as the AMbari UI, this will give you hints about the available commands and the flow of creating or configuring a cluster.
+For example the `cluster create` command is not available until a `blueprint` has not been added or selected. 
+A good approach is to use the `hint` command - as the AMbari UI, this will give you hints about the available commands and the flow of creating or configuring a cluster.
 
 *You can always use TAB for completion or available parameters.*
 
 Example:
 
-Once you logged in you can say **hello**.
+Once you logged in you can say `hello*`.
 
                     .-.._
               __  /`     '.
