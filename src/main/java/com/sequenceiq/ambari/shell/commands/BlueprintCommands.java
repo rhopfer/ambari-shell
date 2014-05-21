@@ -37,8 +37,6 @@ import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.Hints;
 
-import groovyx.net.http.HttpResponseException;
-
 /**
  * Blueprint related commands used in the shell.
  *
@@ -131,7 +129,7 @@ public class BlueprintCommands implements CommandMarker {
       } else {
         message = "No blueprint specified";
       }
-    } catch (HttpResponseException e) {
+    } catch (Exception e) {
       message = "Cannot add blueprint: " + e.getMessage();
     }
     return message;
@@ -159,8 +157,8 @@ public class BlueprintCommands implements CommandMarker {
       client.addDefaultBlueprints();
       context.setHint(Hints.BUILD_CLUSTER);
       context.setBlueprintsAvailable();
-    } catch (HttpResponseException e) {
-      message = "Failed to add default blueprints: " + e.getMessage();
+    } catch (Exception e) {
+      message = "Failed to add the default blueprints: " + e.getMessage();
     }
     return message;
   }

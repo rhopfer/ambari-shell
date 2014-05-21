@@ -101,6 +101,16 @@ public class BlueprintCommandsTest {
     String result = blueprintCommands.addBlueprint();
 
     verify(responseException).getMessage();
-    assertEquals("Failed to add default blueprints: error", result);
+    assertEquals("Failed to add the default blueprints: error", result);
+  }
+
+  @Test
+  public void testAddBlueprintDefaultsForConnectionRefused() throws HttpResponseException {
+    doThrow(new RuntimeException("Connection refused")).when(ambariClient).addDefaultBlueprints();
+    when(responseException.getMessage()).thenReturn("error");
+
+    String result = blueprintCommands.addBlueprint();
+
+    assertEquals("Failed to add the default blueprints: Connection refused", result);
   }
 }
