@@ -162,8 +162,9 @@ public class AmbariContext {
   }
 
   private void checkBlueprints() {
+    blueprintsAvailable = client.isBlueprintAvailable();
     if (cluster == null) {
-      if (blueprintsAvailable = client.isBlueprintAvailable()) {
+      if (blueprintsAvailable) {
         hint = Hints.BUILD_CLUSTER;
       } else {
         hint = Hints.ADD_BLUEPRINT;
