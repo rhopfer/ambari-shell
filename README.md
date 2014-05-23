@@ -34,29 +34,24 @@ Spring-Shell is also battle tested in various Spring projects including:
   Spring Rest-Shell itself would be enough to communicate against Ambari REST API, but we wanted a more
   Donamin Specific Language (DSL) nature of the command structure.
 
-## Installation
+## Installation and usage
 
 Ambari-Shell is distributed as a single-file executable jar. So no `ClassNotFound` should happen. The  **uber jar**
 is generated with the help of spring-boot-maven-plugin available at: [Spring-Boot](http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar).
 Spring-Boot also provides a helper to launch those jars: [JarLauncher](http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar-launching).
 
-This the *installation* is nothing more the getting the jar. You can download the jar, via this one-liner:
-```
-curl -Ls j.mp/get-ambari-shell | bash
-```
-
-Or you can download manually the [latest snapshot](http://maven.sequenceiq.com/snapshots/com/sequenceiq/ambari/ambari-shell/1.0-SNAPSHOT/ambari-shell-1.0-20140415.075312-5.jar) from our Maven repository.
-
-## Usage
+After compiling the project, the shell is ready to use:
 
 ```
-java -jar /tmp/ambari-shell.jar
+java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.server=localhost --ambari.port=8080 --ambari.user=admin --ambari.password=admin
 ```
 
-## Connecting to ambari server
+The `--ambari` options can be omitted if they are the default values otherwise you only need to specify the difference, e.g just the port is different
 
-Your first command is `connect` to be able to attach the shell to a cluster.
 ```
+java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.port=49178
+```
+
     _                _                   _  ____   _            _  _
    / \    _ __ ___  | |__    __ _  _ __ (_)/ ___| | |__    ___ | || |
   / _ \  | '_ ` _ \ | '_ \  / _` || '__|| |\___ \ | '_ \  / _ \| || |
@@ -99,9 +94,9 @@ ambari-shell>
 - **tasks** - Lists the Ambari tasks
 - **version** - Displays shell version
 
-Please note that all commands are context aware - and are available only when it makes sense. 
-For example the `cluster create` command is not available until a `blueprint` has not been added or selected. 
-A good approach is to use the `hint` command - as the AMbari UI, this will give you hints about the available commands and the flow of creating or configuring a cluster.
+Please note that all commands are context aware - and are available only when it makes sense.
+For example the `cluster create` command is not available until a `blueprint` has not been added or selected.
+A good approach is to use the `hint` command - as the Ambari UI, this will give you hints about the available commands and the flow of creating or configuring a cluster.
 
 *You can always use TAB for completion or available parameters.*
 
@@ -118,7 +113,7 @@ Once you logged in you can say `hello`.
            |  / / \ \  \   \_\
            |__|_|  |_|__\
 
-Initially there are no blueprints available - you cn add blueprints from file or URL. For your convenience we have added 2 blueprints as defaults. 
+Initially there are no blueprints available - you cn add blueprints from file or URL. For your convenience we have added 2 blueprints as defaults.
 You can get these blueprints by using the `blueprint defaults` command. The result is the following:
 ```
   BLUEPRINT              STACK
@@ -127,12 +122,12 @@ You can get these blueprints by using the `blueprint defaults` command. The resu
   single-node-hdfs-yarn  HDP:2.0
 ```
 
-Once the blueprints are available you can use them to create a cluster. You can use the following command: `cluster build --blueprint single-node-hdfs-yarn`. 
-Now that the blueprint is selected you have to assign the hosts to the available host groups. 
+Once the blueprints are available you can use them to create a cluster. You can use the following command: `cluster build --blueprint single-node-hdfs-yarn`.
+Now that the blueprint is selected you have to assign the hosts to the available host groups.
 
-Use `cluster assign --hostGroup host_group_1 --host server.ambari.com`. 
+Use `cluster assign --hostGroup host_group_1 --host server.ambari.com`.
 
-You can always `cluster reset` or `cluster preview` to modify or check the configuration. 
+You can always `cluster reset` or `cluster preview` to modify or check the configuration.
 ```
 HOSTGROUP     HOST
   ------------  -----------------
@@ -162,4 +157,3 @@ Once you are happy with you can choose `cluster create` to start building the cl
   MAPREDUCE2_CLIENT INSTALL   PENDING
   SECONDARY_NAMENODE INSTALL  QUEUED
 ```
-
