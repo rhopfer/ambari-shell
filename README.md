@@ -48,9 +48,7 @@ java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.server=lo
 
 The `--ambari` options can be omitted if they are the default values otherwise you only need to specify the difference, e.g just the port is different
 
-```
-java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.port=49178
-```
+
 
     _                _                   _  ____   _            _  _ 
    / \    _ __ ___  | |__    __ _  _ __ (_)/ ___| | |__    ___ | || |
