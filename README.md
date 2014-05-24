@@ -58,7 +58,7 @@ java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.port=4917
  / ___ \ | | | | | || |_) || (_| || |   | | ___) || | | ||  __/| || |
 /_/   \_\|_| |_| |_||_.__/  \__,_||_|   |_||____/ |_| |_| \___||_||_|
 
-Welcome to Ambari Shell. For assistance press `tab`.
+Welcome to Ambari Shell. For assistance press tab or use the `hint` command.
 ```
 
 ## Implemented Commands
