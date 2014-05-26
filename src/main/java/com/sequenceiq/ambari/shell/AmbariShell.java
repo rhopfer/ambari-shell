@@ -54,6 +54,22 @@ public class AmbariShell implements CommandLineRunner {
   }
 
   public static void main(String[] args) {
+    if (args.length == 0) {
+      System.out.println(
+        "\nAmbari Shell: Interactive command line tool for managing Apache Ambari.\n\n" +
+          "Usage:\n" +
+          "  java -jar ambari-shell.jar                  : Starts Ambari Shell in interactive mode.\n" +
+          "  java -jar ambari-shell.jar --cmdfile=<FILE> : Ambari Shell executes commands read from the file.\n\n" +
+          "Options:\n" +
+          "  --ambari.host=<HOSTNAME>       Hostname of the Ambari Server [default: localhost].\n" +
+          "  --ambari.port=<PORT>           Port of the Ambari Server [default: 8080].\n" +
+          "  --ambari.user=<USER>           Username of the Ambari admin [default: admin].\n" +
+          "  --ambari.password=<PASSWORD>   Password of the Ambari admin [default: admin].\n\n" +
+          "Note:\n" +
+          "  At least one option is mandatory."
+      );
+      System.exit(1);
+    }
     new SpringApplicationBuilder(AmbariShell.class).showBanner(false).run(args);
   }
 }
