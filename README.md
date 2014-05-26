@@ -152,3 +152,7 @@ Once you are happy with you can choose `cluster create` to start building the cl
   MAPREDUCE2_CLIENT INSTALL   PENDING
   SECONDARY_NAMENODE INSTALL  QUEUED
 ```
+
+## Summary
+To sum it up in less than two minutes watch this video:
+<script type="text/javascript" src="https://asciinema.org/a/9783.js" id="asciicast-9783" async></script>
