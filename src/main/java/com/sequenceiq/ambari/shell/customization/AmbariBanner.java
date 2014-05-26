@@ -45,6 +45,6 @@ public class AmbariBanner implements BannerProvider {
 
   @Override
   public String getWelcomeMessage() {
-    return "Welcome to Ambari Shell. For assistance press TAB";
+    return "Welcome to Ambari Shell. For command and param completion press TAB, for assistance type 'hint'.";
   }
 }
