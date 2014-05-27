@@ -24,18 +24,28 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.CommandLine;
 import org.springframework.shell.core.JLineShellComponent;
+import org.springframework.shell.event.ShellStatus;
+import org.springframework.shell.event.ShellStatusListener;
+
+import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.model.AmbariContext;
+import com.sequenceiq.ambari.shell.model.Hints;
 
 /**
  * Shell bootstrap.
  */
 @Configuration
 @ComponentScan(basePackageClasses = {AmbariShell.class})
-public class AmbariShell implements CommandLineRunner {
+public class AmbariShell implements CommandLineRunner, ShellStatusListener {
 
   @Autowired
   private CommandLine commandLine;
   @Autowired
   private JLineShellComponent shell;
+  @Autowired
+  private AmbariContext context;
+  @Autowired
+  private AmbariClient client;
 
   @Override
   public void run(String... arg) throws Exception {
@@ -47,11 +57,37 @@ public class AmbariShell implements CommandLineRunner {
         }
       }
     } else {
+      shell.addShellStatusListener(this);
       shell.start();
       shell.promptLoop();
       shell.waitForComplete();
     }
   }
+
+  @Override
+  public void onShellStatusChange(ShellStatus oldStatus, ShellStatus newStatus) {
+    if (newStatus.getStatus() == ShellStatus.Status.STARTED) {
+      try {
+        String cluster = client.getClusterName();
+        boolean available = client.isBlueprintAvailable();
+        if (cluster == null) {
+          if (available) {
+            context.setHint(Hints.BUILD_CLUSTER);
+          } else {
+            context.setHint(Hints.ADD_BLUEPRINT);
+          }
+        } else {
+          context.setHint(Hints.PROGRESS);
+        }
+        context.setCluster(cluster);
+        context.setBlueprintsAvailable(available);
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+        shell.executeCommand("quit");
+      }
+    }
+  }
+
 
   public static void main(String[] args) {
     if (args.length == 0) {

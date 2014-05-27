@@ -168,7 +168,7 @@ public class ClusterCommands implements CommandMarker {
     String blueprint = context.getFocusValue();
     try {
       client.createCluster(blueprint, blueprint, hostGroups);
-      context.connectCluster();
+      context.setCluster(blueprint);
       context.resetFocus();
       context.setHint(Hints.PROGRESS);
     } catch (HttpResponseException e) {

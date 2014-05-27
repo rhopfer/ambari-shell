@@ -183,7 +183,6 @@ public class ClusterCommandsTest {
     String result = clusterCommands.createCluster();
 
     verify(client).createCluster(blueprint, blueprint, map);
-    verify(context).connectCluster();
     verify(context).resetFocus();
     assertFalse(result.contains("Failed"));
     assertTrue(result.contains("Successfully"));

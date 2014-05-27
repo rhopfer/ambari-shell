@@ -17,10 +17,7 @@
  */
 package com.sequenceiq.ambari.shell.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.sequenceiq.ambari.client.AmbariClient;
 
 /**
  * Holds information about the connected Ambari Server.
@@ -31,22 +28,19 @@ public class AmbariContext {
   private String cluster;
   private boolean blueprintsAvailable;
   private Focus focus;
-  private AmbariClient client;
   private Hints hint;
 
-  @Autowired
-  public AmbariContext(AmbariClient client) {
-    this.client = client;
+  public AmbariContext() {
     this.focus = getRootFocus();
-    this.cluster = client.getClusterName();
-    checkBlueprints();
   }
 
   /**
-   * Sets the cluster name if exists.
+   * Sets the name of the cluster.
+   *
+   * @param cluster
    */
-  public void connectCluster() {
-    this.cluster = client.getClusterName();
+  public void setCluster(String cluster) {
+    this.cluster = cluster;
   }
 
   /**
@@ -80,13 +74,6 @@ public class AmbariContext {
    */
   public boolean areBlueprintsAvailable() {
     return blueprintsAvailable;
-  }
-
-  /**
-   * Sets the blueprint availability flag to true
-   */
-  public void setBlueprintsAvailable() {
-    blueprintsAvailable = true;
   }
 
   /**
@@ -149,6 +136,15 @@ public class AmbariContext {
     return cluster;
   }
 
+  /**
+   * Sets whether there are blueprints available or not.
+   *
+   * @param blueprintsAvailable
+   */
+  public void setBlueprintsAvailable(boolean blueprintsAvailable) {
+    this.blueprintsAvailable = blueprintsAvailable;
+  }
+
   private boolean isFocusOn(FocusType type) {
     return focus.isType(type);
   }
@@ -159,18 +155,5 @@ public class AmbariContext {
 
   private String formatPrompt(String prefix, String postfix) {
     return String.format("%s:%s>", prefix, postfix);
-  }
-
-  private void checkBlueprints() {
-    blueprintsAvailable = client.isBlueprintAvailable();
-    if (cluster == null) {
-      if (blueprintsAvailable) {
-        hint = Hints.BUILD_CLUSTER;
-      } else {
-        hint = Hints.ADD_BLUEPRINT;
-      }
-    } else {
-      hint = Hints.PROGRESS;
-    }
   }
 }

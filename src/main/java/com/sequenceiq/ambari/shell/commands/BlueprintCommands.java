@@ -125,7 +125,7 @@ public class BlueprintCommands implements CommandMarker {
         client.addBlueprint(json);
         message = "Blueprint added";
         context.setHint(Hints.BUILD_CLUSTER);
-        context.setBlueprintsAvailable();
+        context.setBlueprintsAvailable(true);
       } else {
         message = "No blueprint specified";
       }
@@ -156,7 +156,7 @@ public class BlueprintCommands implements CommandMarker {
     try {
       client.addDefaultBlueprints();
       context.setHint(Hints.BUILD_CLUSTER);
-      context.setBlueprintsAvailable();
+      context.setBlueprintsAvailable(true);
     } catch (Exception e) {
       message = "Failed to add the default blueprints: " + e.getMessage();
     }
