@@ -33,6 +33,7 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.flash.FlashService;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.FocusType;
 import com.sequenceiq.ambari.shell.model.Hints;
@@ -49,12 +50,14 @@ public class ClusterCommands implements CommandMarker {
 
   private AmbariClient client;
   private AmbariContext context;
+  private FlashService flashService;
   private Map<String, List<String>> hostGroups;
 
   @Autowired
-  public ClusterCommands(AmbariClient client, AmbariContext context) {
+  public ClusterCommands(AmbariClient client, AmbariContext context, FlashService flashService) {
     this.client = client;
     this.context = context;
+    this.flashService = flashService;
   }
 
   /**
@@ -171,6 +174,7 @@ public class ClusterCommands implements CommandMarker {
       context.setCluster(blueprint);
       context.resetFocus();
       context.setHint(Hints.PROGRESS);
+      flashService.showInstallProgress();
     } catch (HttpResponseException e) {
       createNewHostGroups();
       message = "Failed to create the cluster: " + e.getMessage();

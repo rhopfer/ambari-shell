@@ -42,6 +42,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.flash.FlashService;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 import groovyx.net.http.HttpResponseException;
@@ -58,6 +59,8 @@ public class ClusterCommandsTest {
   private AmbariContext context;
   @Mock
   private HttpResponseException responseException;
+  @Mock
+  private FlashService flashService;
 
   @Test
   public void testIsClusterBuildCommandAvailable() {
