@@ -130,6 +130,27 @@ public class ClusterCommands implements CommandMarker {
   }
 
   /**
+   * Checks whether the cluster auto command is available or not.
+   *
+   * @return true if available false otherwise
+   */
+  @CliAvailabilityIndicator(value = "cluster auto")
+  public boolean isClusterAutoAssignAvailable() {
+    return context.isFocusOnClusterBuild() && !isHostAssigned();
+  }
+
+  /**
+   * Tries to auto associate hosts to host groups.
+   *
+   * @return prints the auto assignments
+   */
+  @CliCommand(value = "cluster auto", help = "Automatically assigns hosts to different host groups base on the provided strategy")
+  public String autoAssign() {
+    hostGroups = client.recommendAssignments(context.getFocusValue());
+    return showAssignments();
+  }
+
+  /**
    * Checks whether the cluster preview command is available or not.
    *
    * @return true if available false otherwise
