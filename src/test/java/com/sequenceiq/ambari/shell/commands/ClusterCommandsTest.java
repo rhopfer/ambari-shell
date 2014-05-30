@@ -97,11 +97,11 @@ public class ClusterCommandsTest {
 
   @Test
   public void testBuildClusterForNonExistingBlueprint() {
-    when(client.doesBlueprintExists("id")).thenReturn(false);
+    when(client.doesBlueprintExist("id")).thenReturn(false);
 
     String result = clusterCommands.buildCluster("id");
 
-    verify(client).doesBlueprintExists("id");
+    verify(client).doesBlueprintExist("id");
     assertEquals("Not a valid blueprint id", result);
   }
 
@@ -109,14 +109,14 @@ public class ClusterCommandsTest {
   public void testBuildCluster() {
     Map<String, String> hostNames = singletonMap("host1", "HEALTHY");
     Map<String, List<String>> map = singletonMap("group1", asList("comp1", "comp2"));
-    when(client.doesBlueprintExists("id")).thenReturn(true);
+    when(client.doesBlueprintExist("id")).thenReturn(true);
     when(client.getBlueprintMap("id")).thenReturn(map);
     when(context.getFocusValue()).thenReturn("id");
     when(client.getHostNames()).thenReturn(hostNames);
 
     String result = clusterCommands.buildCluster("id");
 
-    verify(client).doesBlueprintExists("id");
+    verify(client).doesBlueprintExist("id");
     verify(client).getBlueprintMap("id");
     verify(client).getHostGroups("id");
     assertEquals(String.format("%s\n%s", renderSingleMap(hostNames, "HOSTNAME", "STATE"),

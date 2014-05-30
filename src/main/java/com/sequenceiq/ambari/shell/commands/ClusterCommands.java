@@ -81,7 +81,7 @@ public class ClusterCommands implements CommandMarker {
   public String buildCluster(
     @CliOption(key = "blueprint", mandatory = true, help = "Id of the blueprint, use 'blueprints' command to see the list") String id) {
     String message;
-    if (client.doesBlueprintExists(id)) {
+    if (client.doesBlueprintExist(id)) {
       context.setFocus(id, FocusType.CLUSTER_BUILD);
       context.setHint(Hints.ASSIGN_HOSTS);
       message = String.format("%s\n%s",
