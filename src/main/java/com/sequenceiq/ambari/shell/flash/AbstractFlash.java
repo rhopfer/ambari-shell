@@ -28,7 +28,7 @@ import org.springframework.shell.core.JLineShellComponent;
  */
 public abstract class AbstractFlash implements Runnable {
 
-  private static final int SLEEP_TIME = 1000;
+  private static final int SLEEP_TIME = 1500;
   private volatile boolean stop;
   private FlashType flashType;
   private JLineShellComponent shell;
