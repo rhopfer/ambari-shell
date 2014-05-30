@@ -146,7 +146,10 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliCommand(value = "cluster auto", help = "Automatically assigns hosts to different host groups base on the provided strategy")
   public String autoAssign() {
-    hostGroups = client.recommendAssignments(context.getFocusValue());
+    Map<String, List<String>> assignments = client.recommendAssignments(context.getFocusValue());
+    if (!assignments.isEmpty()) {
+      hostGroups = assignments;
+    }
     return showAssignments();
   }
 
