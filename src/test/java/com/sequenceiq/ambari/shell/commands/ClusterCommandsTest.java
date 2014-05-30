@@ -246,4 +246,31 @@ public class ClusterCommandsTest {
 
     assertTrue(result);
   }
+
+  @Test
+  public void testAutoAssignForEmptyResult() {
+    Map<String, List<String>> hostGroups = singletonMap("group1", asList("host1"));
+    ReflectionTestUtils.setField(clusterCommands, "hostGroups", hostGroups);
+    when(context.getFocusValue()).thenReturn("blueprint");
+    when(client.recommendAssignments("blueprint")).thenReturn(new HashMap<String, List<String>>());
+
+    clusterCommands.autoAssign();
+
+    Map<String, List<String>> result = (Map<String, List<String>>) ReflectionTestUtils.getField(clusterCommands, "hostGroups");
+    assertEquals(hostGroups, result);
+  }
+
+  @Test
+  public void testAutoAssign() {
+    Map<String, List<String>> hostGroups = singletonMap("group1", asList("host1"));
+    Map<String, List<String>> newAssignments = singletonMap("group1", asList("host1"));
+    ReflectionTestUtils.setField(clusterCommands, "hostGroups", hostGroups);
+    when(context.getFocusValue()).thenReturn("blueprint");
+    when(client.recommendAssignments("blueprint")).thenReturn(newAssignments);
+
+    clusterCommands.autoAssign();
+
+    Map<String, List<String>> result = (Map<String, List<String>>) ReflectionTestUtils.getField(clusterCommands, "hostGroups");
+    assertEquals(newAssignments, result);
+  }
 }
