@@ -40,7 +40,7 @@ Ambari-Shell is distributed as a single-file executable jar. So no `ClassNotFoun
 is generated with the help of spring-boot-maven-plugin available at: [Spring-Boot](http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar).
 Spring-Boot also provides a helper to launch those jars: [JarLauncher](http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar-launching).
 
-After compiling the project, the shell is ready to use:
+After compiling the project, the shell is ready to use (make sure you use Java 7 or above).
 
 ```
 java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.server=localhost --ambari.port=8080 --ambari.user=admin --ambari.password=admin
