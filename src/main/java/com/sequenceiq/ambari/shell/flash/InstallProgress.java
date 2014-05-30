@@ -30,7 +30,8 @@ import com.sequenceiq.ambari.client.AmbariClient;
  */
 public class InstallProgress extends AbstractFlash {
 
-  private static final int HUNDRED = 100;
+  private static final int SUCCESS = 100;
+  private static final int FAILED = -1;
   private AmbariClient client;
   private volatile boolean done;
 
@@ -46,7 +47,8 @@ public class InstallProgress extends AbstractFlash {
       BigDecimal progress = client.getInstallProgress();
       if (progress != null) {
         BigDecimal decimal = progress.setScale(2, BigDecimal.ROUND_HALF_UP);
-        if (HUNDRED != decimal.intValue()) {
+        int intValue = decimal.intValue();
+        if (intValue != SUCCESS && intValue != FAILED) {
           sb.append("Installation: ").append(decimal).append("% ");
           int rounded = round(progress.setScale(0, BigDecimal.ROUND_UP).intValue() / 10);
           for (int i = 0; i < 10; i++) {
@@ -56,6 +58,9 @@ public class InstallProgress extends AbstractFlash {
               sb.append("-");
             }
           }
+        } else if (intValue == FAILED) {
+          sb.append("Installation: FAILED");
+          done = true;
         } else {
           sb.append("Installation: COMPLETE");
           done = true;
