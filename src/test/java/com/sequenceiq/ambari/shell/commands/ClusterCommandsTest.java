@@ -44,6 +44,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.flash.FlashService;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
+import com.sequenceiq.ambari.shell.model.Hints;
 
 import groovyx.net.http.HttpResponseException;
 
@@ -272,5 +273,6 @@ public class ClusterCommandsTest {
 
     Map<String, List<String>> result = (Map<String, List<String>>) ReflectionTestUtils.getField(clusterCommands, "hostGroups");
     assertEquals(newAssignments, result);
+    verify(context).setHint(Hints.CREATE_CLUSTER);
   }
 }

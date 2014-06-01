@@ -149,6 +149,7 @@ public class ClusterCommands implements CommandMarker {
     Map<String, List<String>> assignments = client.recommendAssignments(context.getFocusValue());
     if (!assignments.isEmpty()) {
       hostGroups = assignments;
+      context.setHint(Hints.CREATE_CLUSTER);
     }
     return showAssignments();
   }
