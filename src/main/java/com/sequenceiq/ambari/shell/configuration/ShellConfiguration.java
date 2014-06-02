@@ -17,6 +17,7 @@
  */
 package com.sequenceiq.ambari.shell.configuration;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -85,6 +86,11 @@ public class ShellConfiguration {
   @Bean
   ThreadPoolExecutorFactoryBean getThreadPoolExecutorFactoryBean() {
     return new ThreadPoolExecutorFactoryBean();
+  }
+
+  @Bean
+  ObjectMapper getObjectMapper() {
+    return new ObjectMapper();
   }
 
   @Bean
