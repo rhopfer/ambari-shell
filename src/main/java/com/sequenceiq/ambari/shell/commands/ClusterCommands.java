@@ -134,7 +134,7 @@ public class ClusterCommands implements CommandMarker {
    *
    * @return true if available false otherwise
    */
-  @CliAvailabilityIndicator(value = "cluster auto")
+  @CliAvailabilityIndicator(value = "cluster autoAssign")
   public boolean isClusterAutoAssignAvailable() {
     return context.isFocusOnClusterBuild() && !isHostAssigned();
   }
@@ -144,7 +144,7 @@ public class ClusterCommands implements CommandMarker {
    *
    * @return prints the auto assignments
    */
-  @CliCommand(value = "cluster auto", help = "Automatically assigns hosts to different host groups base on the provided strategy")
+  @CliCommand(value = "cluster autoAssign", help = "Automatically assigns hosts to different host groups base on the provided strategy")
   public String autoAssign() {
     Map<String, List<String>> assignments = client.recommendAssignments(context.getFocusValue());
     if (!assignments.isEmpty()) {
