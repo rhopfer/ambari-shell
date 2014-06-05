@@ -68,6 +68,7 @@ Welcome to Ambari Shell. For assistance press tab or use the `hint` command.
 - **blueprint list** - Lists all known blueprints
 - **blueprint show** - Shows the blueprint by its id
 - **cluster assign** - Assign host to host group
+- **cluster auto** - Auto assigns host to host groups (based on blueprint cardinality)
 - **cluster build** - Starts to build a cluster
 - **cluster create** - Create a cluster based on current blueprint and assigned hosts
 - **cluster delete** - Delete the cluster
