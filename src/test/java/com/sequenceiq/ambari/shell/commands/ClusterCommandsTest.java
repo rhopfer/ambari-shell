@@ -168,7 +168,7 @@ public class ClusterCommandsTest {
     doThrow(responseException).when(client).createCluster(blueprint, blueprint, map);
     doThrow(responseException).when(client).deleteCluster(blueprint);
 
-    String result = clusterCommands.createCluster();
+    String result = clusterCommands.createCluster(false);
 
     verify(client).createCluster(blueprint, blueprint, map);
     verify(client).getHostGroups(blueprint);
@@ -184,7 +184,7 @@ public class ClusterCommandsTest {
     when(context.getFocusValue()).thenReturn(blueprint);
     when(client.getClusterName()).thenReturn("cluster");
 
-    String result = clusterCommands.createCluster();
+    String result = clusterCommands.createCluster(false);
 
     verify(client).createCluster(blueprint, blueprint, map);
     verify(context).resetFocus();

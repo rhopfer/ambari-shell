@@ -32,12 +32,14 @@ public class InstallProgress extends AbstractFlash {
 
   private static final int SUCCESS = 100;
   private static final int FAILED = -1;
+  private final boolean exit;
   private AmbariClient client;
   private volatile boolean done;
 
-  public InstallProgress(JLineShellComponent shell, AmbariClient client) {
+  public InstallProgress(JLineShellComponent shell, AmbariClient client, boolean exit) {
     super(shell, FlashType.INSTALL);
     this.client = client;
+    this.exit = exit;
   }
 
   @Override
@@ -67,6 +69,10 @@ public class InstallProgress extends AbstractFlash {
         }
       } else {
         sb.append("Installation: WAITING..");
+      }
+    } else {
+      if (exit) {
+        System.exit(0);
       }
     }
     return sb.toString();

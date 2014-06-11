@@ -42,7 +42,7 @@ public class FlashService {
     this.executorService = executorService;
   }
 
-  public void showInstallProgress() {
-    executorService.submit(new InstallProgress(shell, client));
+  public void showInstallProgress(boolean exit) {
+    executorService.submit(new InstallProgress(shell, client, exit));
   }
 }

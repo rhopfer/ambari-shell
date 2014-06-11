@@ -191,7 +191,8 @@ public class ClusterCommands implements CommandMarker {
    * @return status message
    */
   @CliCommand(value = "cluster create", help = "Create a cluster based on current blueprint and assigned hosts")
-  public String createCluster() {
+  public String createCluster(
+    @CliOption(key = "exitOnFinish", mandatory = false, help = "Quits the shell when the cluster creation finishes") Boolean exit) {
     String message = "Successfully created the cluster";
     String blueprint = context.getFocusValue();
     try {
@@ -199,7 +200,7 @@ public class ClusterCommands implements CommandMarker {
       context.setCluster(blueprint);
       context.resetFocus();
       context.setHint(Hints.PROGRESS);
-      flashService.showInstallProgress();
+      flashService.showInstallProgress(exit == null ? false : exit);
     } catch (HttpResponseException e) {
       createNewHostGroups();
       message = "Failed to create the cluster: " + e.getMessage();
