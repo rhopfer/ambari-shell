@@ -29,11 +29,9 @@ import org.springframework.shell.core.JLineShellComponent;
 public abstract class AbstractFlash implements Runnable {
 
   private static final int SLEEP_TIME = 1500;
-  private static final int RETRY_THRESHOLD = 3;
   private volatile boolean stop;
   private FlashType flashType;
   private JLineShellComponent shell;
-  private volatile int retryCount;
 
   protected AbstractFlash(JLineShellComponent shell, FlashType flashType) {
     this.shell = shell;
@@ -51,9 +49,7 @@ public abstract class AbstractFlash implements Runnable {
         }
         sleep(SLEEP_TIME);
       } catch (Exception e) {
-        if (retryCount++ > RETRY_THRESHOLD) {
-          stop = true;
-        }
+        // ignore
       } finally {
         shell.flash(Level.SEVERE, text == null ? "" : text, flashType.getName());
       }
