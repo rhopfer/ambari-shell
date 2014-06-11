@@ -33,6 +33,8 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.completion.Blueprint;
+import com.sequenceiq.ambari.shell.completion.Host;
 import com.sequenceiq.ambari.shell.flash.FlashService;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.FocusType;
@@ -79,14 +81,15 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliCommand(value = "cluster build", help = "Starts to build a cluster")
   public String buildCluster(
-    @CliOption(key = "blueprint", mandatory = true, help = "Id of the blueprint, use 'blueprints' command to see the list") String id) {
+    @CliOption(key = "blueprint", mandatory = true, help = "Id of the blueprint, use 'blueprints' command to see the list") Blueprint id) {
     String message;
-    if (client.doesBlueprintExist(id)) {
-      context.setFocus(id, FocusType.CLUSTER_BUILD);
+    String blueprint = id.getName();
+    if (client.doesBlueprintExist(blueprint)) {
+      context.setFocus(blueprint, FocusType.CLUSTER_BUILD);
       context.setHint(Hints.ASSIGN_HOSTS);
       message = String.format("%s\n%s",
         renderSingleMap(client.getHostNames(), "HOSTNAME", "STATE"),
-        renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT"));
+        renderMultiValueMap(client.getBlueprintMap(blueprint), "HOSTGROUP", "COMPONENT"));
       createNewHostGroups();
     } else {
       message = "Not a valid blueprint id";
@@ -113,18 +116,19 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliCommand(value = "cluster assign", help = "Assign host to host group")
   public String assign(
-    @CliOption(key = "host", mandatory = true, help = "Fully qualified host name") String host,
+    @CliOption(key = "host", mandatory = true, help = "Fully qualified host name") Host host,
     @CliOption(key = "hostGroup", mandatory = true, help = "Host group which to assign the host") String group) {
     String message;
-    if (client.getHostNames().keySet().contains(host)) {
-      if (addHostToGroup(host, group)) {
+    String hostName = host.getName();
+    if (client.getHostNames().keySet().contains(hostName)) {
+      if (addHostToGroup(hostName, group)) {
         context.setHint(Hints.CREATE_CLUSTER);
-        message = String.format("%s has been added to %s", host, group);
+        message = String.format("%s has been added to %s", hostName, group);
       } else {
         message = String.format("%s is not a valid host group", group);
       }
     } else {
-      message = String.format("%s is not a valid hostname", host);
+      message = String.format("%s is not a valid hostname", hostName);
     }
     return message;
   }

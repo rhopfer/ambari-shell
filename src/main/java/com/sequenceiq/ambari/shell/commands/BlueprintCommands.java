@@ -35,6 +35,7 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.completion.Blueprint;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.Hints;
 
@@ -95,8 +96,8 @@ public class BlueprintCommands implements CommandMarker {
    */
   @CliCommand(value = "blueprint show", help = "Shows the blueprint by its id")
   public String showBlueprint(
-    @CliOption(key = "id", mandatory = true, help = "Id of the blueprint") String id) {
-    return renderMultiValueMap(client.getBlueprintMap(id), "HOSTGROUP", "COMPONENT");
+    @CliOption(key = "id", mandatory = true, help = "Id of the blueprint") Blueprint id) {
+    return renderMultiValueMap(client.getBlueprintMap(id.getName()), "HOSTGROUP", "COMPONENT");
   }
 
   /**

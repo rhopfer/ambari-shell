@@ -27,6 +27,7 @@ import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.completion.Host;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.FocusType;
 
@@ -85,13 +86,14 @@ public class HostCommands implements CommandMarker {
    */
   @CliCommand(value = "host focus", help = "Sets the useHost to the specified host")
   public String focusHost(
-    @CliOption(key = "host", mandatory = true, help = "hostname") String host) {
+    @CliOption(key = "host", mandatory = true, help = "hostname") Host host) {
     String message;
-    if (client.getHostNames().keySet().contains(host)) {
-      context.setFocus(host, FocusType.HOST);
-      message = "Focus set to: " + host;
+    String hostName = host.getName();
+    if (client.getHostNames().keySet().contains(hostName)) {
+      context.setFocus(hostName, FocusType.HOST);
+      message = "Focus set to: " + hostName;
     } else {
-      message = host + " is not a valid host name";
+      message = hostName + " is not a valid host name";
     }
     return message;
   }

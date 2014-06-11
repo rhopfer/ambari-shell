@@ -42,6 +42,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.completion.Blueprint;
+import com.sequenceiq.ambari.shell.completion.Host;
 import com.sequenceiq.ambari.shell.flash.FlashService;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.Hints;
@@ -100,7 +102,7 @@ public class ClusterCommandsTest {
   public void testBuildClusterForNonExistingBlueprint() {
     when(client.doesBlueprintExist("id")).thenReturn(false);
 
-    String result = clusterCommands.buildCluster("id");
+    String result = clusterCommands.buildCluster(new Blueprint("id"));
 
     verify(client).doesBlueprintExist("id");
     assertEquals("Not a valid blueprint id", result);
@@ -115,7 +117,7 @@ public class ClusterCommandsTest {
     when(context.getFocusValue()).thenReturn("id");
     when(client.getHostNames()).thenReturn(hostNames);
 
-    String result = clusterCommands.buildCluster("id");
+    String result = clusterCommands.buildCluster(new Blueprint("id"));
 
     verify(client).doesBlueprintExist("id");
     verify(client).getBlueprintMap("id");
@@ -130,7 +132,7 @@ public class ClusterCommandsTest {
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
     when(client.getHostNames()).thenReturn(singletonMap("host3", "HEALTHY"));
 
-    String result = clusterCommands.assign("host3", "group0");
+    String result = clusterCommands.assign(new Host("host3"), "group0");
 
     assertEquals("group0 is not a valid host group", result);
   }
@@ -142,7 +144,7 @@ public class ClusterCommandsTest {
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
     when(client.getHostNames()).thenReturn(singletonMap("host3", "HEALTHY"));
 
-    String result = clusterCommands.assign("host3", "group1");
+    String result = clusterCommands.assign(new Host("host3"), "group1");
 
     assertEquals("host3 has been added to group1", result);
   }
@@ -154,7 +156,7 @@ public class ClusterCommandsTest {
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", map);
     when(client.getHostNames()).thenReturn(singletonMap("host2", "HEALTHY"));
 
-    String result = clusterCommands.assign("host3", "group1");
+    String result = clusterCommands.assign(new Host("host3"), "group1");
 
     assertEquals("host3 is not a valid hostname", result);
   }

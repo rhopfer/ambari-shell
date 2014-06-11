@@ -30,6 +30,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.completion.Host;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.FocusType;
 
@@ -48,7 +49,7 @@ public class HostCommandsTest {
   public void testFocusHostForValidHost() {
     when(client.getHostNames()).thenReturn(singletonMap("host1", "HEALTHY"));
 
-    String result = hostCommands.focusHost("host1");
+    String result = hostCommands.focusHost(new Host("host1"));
 
     verify(context).setFocus("host1", FocusType.HOST);
     assertEquals("Focus set to: host1", result);
@@ -58,7 +59,7 @@ public class HostCommandsTest {
   public void testFocusHostForInvalidHost() {
     when(client.getHostNames()).thenReturn(singletonMap("host3", "HEALTHY"));
 
-    String result = hostCommands.focusHost("host1");
+    String result = hostCommands.focusHost(new Host("host1"));
 
     verify(context, times(0)).setFocus("host1", FocusType.HOST);
     assertEquals("host1 is not a valid host name", result);

@@ -17,6 +17,7 @@
  */
 package com.sequenceiq.ambari.shell.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.shell.converters.AvailableCommandsConverter;
@@ -37,11 +38,18 @@ import org.springframework.shell.converters.StaticFieldConverterImpl;
 import org.springframework.shell.converters.StringConverter;
 import org.springframework.shell.core.Converter;
 
+import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.converter.BlueprintConverter;
+import com.sequenceiq.ambari.shell.converter.HostConverter;
+
 /**
  * Configures the converters used by the shell.
  */
 @Configuration
 public class ConverterConfiguration {
+
+  @Autowired
+  private AmbariClient client;
 
   @Bean
   Converter simpleFileConverter() {
@@ -121,5 +129,15 @@ public class ConverterConfiguration {
   @Bean
   Converter staticFieldConverterImpl() {
     return new StaticFieldConverterImpl();
+  }
+
+  @Bean
+  Converter blueprintConverter() {
+    return new BlueprintConverter(client);
+  }
+
+  @Bean
+  Converter hostConverter() {
+    return new HostConverter(client);
   }
 }
