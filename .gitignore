@@ -4,3 +4,6 @@
 target
 spring-shell.log
 lib
+*.iml
+.idea
+*.log
