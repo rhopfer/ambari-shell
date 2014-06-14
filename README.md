@@ -87,8 +87,8 @@ Welcome to Ambari Shell. For assistance press tab or use the `hint` command.
 - **script** - Parses the specified resource file and executes its commands
 - **service components** - Lists all services with their components
 - **service list** - Lists the available services
-- ** services start** - Starts all the services
-- ** services stop** - Stops all the running services
+- **services start** - Starts all the services
+- **services stop** - Stops all the running services
 - **tasks** - Lists the Ambari tasks
 - **version** - Displays shell version
 
