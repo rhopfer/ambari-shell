@@ -159,3 +159,5 @@ Once you are happy with you can choose `cluster create` to start building the cl
 ## Summary
 To sum it up in less than two minutes watch this video:
 https://asciinema.org/a/9783
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/da1aff134f981b790d7870262731514e "githalytics.com")](http://githalytics.com/sequenceiq/ambari-shell)
