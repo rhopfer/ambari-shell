@@ -42,6 +42,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.client.InvalidHostGroupHostAssociation;
 import com.sequenceiq.ambari.shell.completion.Blueprint;
 import com.sequenceiq.ambari.shell.completion.Host;
 import com.sequenceiq.ambari.shell.flash.FlashService;
@@ -251,7 +252,7 @@ public class ClusterCommandsTest {
   }
 
   @Test
-  public void testAutoAssignForEmptyResult() {
+  public void testAutoAssignForEmptyResult() throws InvalidHostGroupHostAssociation {
     Map<String, List<String>> hostGroups = singletonMap("group1", asList("host1"));
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", hostGroups);
     when(context.getFocusValue()).thenReturn("blueprint");
@@ -264,7 +265,7 @@ public class ClusterCommandsTest {
   }
 
   @Test
-  public void testAutoAssign() {
+  public void testAutoAssign() throws InvalidHostGroupHostAssociation {
     Map<String, List<String>> hostGroups = singletonMap("group1", asList("host1"));
     Map<String, List<String>> newAssignments = singletonMap("group1", asList("host1"));
     ReflectionTestUtils.setField(clusterCommands, "hostGroups", hostGroups);
