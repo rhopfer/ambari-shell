@@ -41,6 +41,7 @@ import org.springframework.shell.core.Converter;
 import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.converter.BlueprintConverter;
 import com.sequenceiq.ambari.shell.converter.HostConverter;
+import com.sequenceiq.ambari.shell.converter.ServiceConverter;
 
 /**
  * Configures the converters used by the shell.
@@ -139,5 +140,10 @@ public class ConverterConfiguration {
   @Bean
   Converter hostConverter() {
     return new HostConverter(client);
+  }
+
+  @Bean
+  Converter serviceConverter() {
+    return new ServiceConverter(client);
   }
 }
