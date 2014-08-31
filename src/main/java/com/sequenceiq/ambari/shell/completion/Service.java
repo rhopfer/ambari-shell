@@ -17,15 +17,10 @@
  */
 package com.sequenceiq.ambari.shell.completion;
 
-public class Service {
-
-  private final String name;
+public class Service extends AbstractCompletion {
 
   public Service(String name) {
-    this.name = name;
+    super(name);
   }
 
-  public String getName() {
-    return name;
-  }
 }

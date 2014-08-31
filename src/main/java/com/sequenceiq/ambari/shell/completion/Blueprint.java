@@ -17,15 +17,10 @@
  */
 package com.sequenceiq.ambari.shell.completion;
 
-public class Blueprint {
-
-  private final String name;
+public class Blueprint extends AbstractCompletion {
 
   public Blueprint(String name) {
-    this.name = name;
+    super(name);
   }
 
-  public String getName() {
-    return name;
-  }
 }

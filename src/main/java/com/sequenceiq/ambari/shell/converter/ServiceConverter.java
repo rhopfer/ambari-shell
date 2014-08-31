@@ -18,39 +18,26 @@
 package com.sequenceiq.ambari.shell.converter;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.shell.core.Completion;
-import org.springframework.shell.core.Converter;
 import org.springframework.shell.core.MethodTarget;
 
 import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.completion.Service;
 
-public class ServiceConverter implements Converter<Service> {
-
-  private AmbariClient client;
+public class ServiceConverter extends AbstractConverter<Service> {
 
   public ServiceConverter(AmbariClient client) {
-    this.client = client;
+    super(client);
   }
 
   @Override
-  public boolean supports(Class<?> type, String optionContext) {
+  public boolean supports(Class<?> type, String s) {
     return Service.class.isAssignableFrom(type);
   }
 
   @Override
-  public Service convertFromText(String value, Class<?> targetType, String optionContext) {
-    return new Service(value);
-  }
-
-  @Override
   public boolean getAllPossibleValues(List<Completion> completions, Class<?> targetType, String existingData, String optionContext, MethodTarget target) {
-    Set<String> services = client.getServicesMap().keySet();
-    for (String service : services) {
-      completions.add(new Completion(service));
-    }
-    return true;
+    return getAllPossibleValues(completions, getClient().getServicesMap().keySet());
   }
 }

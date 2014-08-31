@@ -17,10 +17,15 @@
  */
 package com.sequenceiq.ambari.shell.completion;
 
-public class Host extends AbstractCompletion {
+public abstract class AbstractCompletion {
 
-  public Host(String name) {
-    super(name);
+  private final String name;
+
+  protected AbstractCompletion(String name) {
+    this.name = name;
   }
 
+  public String getName() {
+    return name;
+  }
 }

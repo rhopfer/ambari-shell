@@ -15,12 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sequenceiq.ambari.shell.completion;
+package com.sequenceiq.ambari.shell.converter;
 
-public class Host extends AbstractCompletion {
+import java.util.List;
 
-  public Host(String name) {
-    super(name);
+import org.springframework.shell.core.Completion;
+import org.springframework.shell.core.MethodTarget;
+
+import com.sequenceiq.ambari.client.AmbariClient;
+import com.sequenceiq.ambari.shell.completion.ConfigType;
+
+public class ConfigTypeConverter extends AbstractConverter<ConfigType> {
+
+  public ConfigTypeConverter(AmbariClient client) {
+    super(client);
   }
 
+  @Override
+  public boolean supports(Class<?> type, String s) {
+    return ConfigType.class.isAssignableFrom(type);
+  }
+
+  @Override
+  public boolean getAllPossibleValues(List<Completion> completions, Class<?> aClass, String s, String s2, MethodTarget methodTarget) {
+    return getAllPossibleValues(completions, getClient().getServiceConfigMap().keySet());
+  }
 }

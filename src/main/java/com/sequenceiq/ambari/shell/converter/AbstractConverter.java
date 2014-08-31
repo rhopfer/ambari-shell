@@ -17,27 +17,43 @@
  */
 package com.sequenceiq.ambari.shell.converter;
 
+import java.lang.reflect.Constructor;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.shell.core.Completion;
-import org.springframework.shell.core.MethodTarget;
+import org.springframework.shell.core.Converter;
 
 import com.sequenceiq.ambari.client.AmbariClient;
-import com.sequenceiq.ambari.shell.completion.Blueprint;
+import com.sequenceiq.ambari.shell.completion.AbstractCompletion;
 
-public class BlueprintConverter extends AbstractConverter<Blueprint> {
+public abstract class AbstractConverter<T extends AbstractCompletion> implements Converter<T> {
 
-  public BlueprintConverter(AmbariClient client) {
-    super(client);
+  private AmbariClient client;
+
+  protected AbstractConverter(AmbariClient client) {
+    this.client = client;
   }
 
   @Override
-  public boolean supports(Class<?> type, String s) {
-    return Blueprint.class.isAssignableFrom(type);
+  public T convertFromText(String value, Class<?> clazz, String optionContext) {
+    try {
+      Constructor<?> constructor = clazz.getDeclaredConstructor(String.class);
+      return (T) constructor.newInstance(value);
+    } catch (Exception e) {
+      return null;
+    }
   }
 
-  @Override
-  public boolean getAllPossibleValues(List<Completion> completions, Class<?> targetType, String existingData, String optionContext, MethodTarget target) {
-    return getAllPossibleValues(completions, getClient().getBlueprintsMap().keySet());
+  public boolean getAllPossibleValues(List<Completion> completions, Collection<String> values) {
+    for (String value : values) {
+      completions.add(new Completion(value));
+    }
+    return true;
   }
+
+  public AmbariClient getClient() {
+    return client;
+  }
+
 }

@@ -17,9 +17,9 @@
  */
 package com.sequenceiq.ambari.shell.completion;
 
-public class Host extends AbstractCompletion {
+public class ConfigType extends AbstractCompletion {
 
-  public Host(String name) {
+  public ConfigType(String name) {
     super(name);
   }
 
