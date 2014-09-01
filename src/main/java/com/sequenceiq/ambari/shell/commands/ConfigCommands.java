@@ -19,8 +19,16 @@ package com.sequenceiq.ambari.shell.commands;
 
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.hadoop.conf.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
@@ -64,8 +72,93 @@ public class ConfigCommands implements CommandMarker {
    */
   @CliCommand(value = "configuration show", help = "Prints the desired configuration")
   public String showConfig(@CliOption(key = "type", mandatory = true, help = "Type of the configuration") ConfigType configType) {
-    String config = configType.getName();
-    Map<String, Map<String, String>> configMap = client.getServiceConfigMap(config);
-    return renderSingleMap(configMap.get(config), "KEY", "VALUE");
+    String configTypeName = configType.getName();
+    Map<String, Map<String, String>> configMap = client.getServiceConfigMap(configTypeName);
+    return renderSingleMap(configMap.get(configTypeName), "KEY", "VALUE");
   }
+
+  /**
+   * Checks whether the configuration set command is available or not.
+   *
+   * @return true if available false otherwise
+   */
+  @CliAvailabilityIndicator("configuration set")
+  public boolean isConfigSetCommandAvailable() {
+    return context.isConnectedToCluster();
+  }
+
+  /**
+   * Sets the desired configuration.
+   */
+  @CliCommand(value = "configuration set", help = "Sets the desired configuration")
+  public String setConfig(@CliOption(key = "type", mandatory = true, help = "Type of the configuration") ConfigType configType,
+                          @CliOption(key = "url", help = "URL of the config") String url,
+                          @CliOption(key = "file", help = "File of the config") File file) throws IOException {
+    Configuration configuration = new Configuration(false);
+    if (file == null) {
+      configuration.addResource(new URL(url));
+    } else {
+      configuration.addResource(new FileInputStream(file));
+    }
+    Map<String, String> config = new HashMap<String, String>();
+    Iterator<Map.Entry<String, String>> iterator = configuration.iterator();
+    while (iterator.hasNext()) {
+      Map.Entry<String, String> entry = iterator.next();
+      config.put(entry.getKey(), entry.getValue());
+    }
+    client.modifyConfiguration(configType.getName(), config);
+    return "Restart is required!\n" + renderSingleMap(config, "KEY", "VALUE");
+  }
+
+  /**
+   * Checks whether the configuration modify command is available or not.
+   *
+   * @return true if available false otherwise
+   */
+  @CliAvailabilityIndicator("configuration modify")
+  public boolean isConfigModifyCommandAvailable() {
+    return context.isConnectedToCluster();
+  }
+
+  /**
+   * Modify the desired configuration.
+   */
+  @CliCommand(value = "configuration modify", help = "Modify the desired configuration")
+  public String modifyConfig(@CliOption(key = "type", mandatory = true, help = "Type of the configuration") ConfigType configType,
+                             @CliOption(key = "key", mandatory = true, help = "Key of the config") String key,
+                             @CliOption(key = "value", mandatory = true, help = "Value of the config") String value) {
+    String configTypeName = configType.getName();
+    Map<String, String> config = client.getServiceConfigMap(configTypeName).get(configTypeName);
+    config.put(key, value);
+    client.modifyConfiguration(configTypeName, config);
+    return "Restart is required!\n" + renderSingleMap(config, "KEY", "VALUE");
+  }
+
+  /**
+   * Checks whether the configuration modify command is available or not.
+   *
+   * @return true if available false otherwise
+   */
+  @CliAvailabilityIndicator("configuration download")
+  public boolean isConfigDownloadCommandAvailable() {
+    return context.isConnectedToCluster();
+  }
+
+  /**
+   * Modify the desired configuration.
+   */
+  @CliCommand(value = "configuration download", help = "Downloads the desired configuration")
+  public String downloadConfig(@CliOption(key = "type", mandatory = true, help = "Type of the configuration") ConfigType configType) throws IOException {
+    String configTypeName = configType.getName();
+    Map<String, String> config = client.getServiceConfigMap(configTypeName).get(configTypeName);
+    Configuration configuration = new Configuration(false);
+    for (String key : config.keySet()) {
+      configuration.set(key, config.get(key));
+    }
+    File file = new File(configTypeName);
+    FileWriter writer = new FileWriter(file);
+    configuration.writeXml(writer);
+    return "Configuration saved to: " + file.getAbsolutePath();
+  }
+
 }
