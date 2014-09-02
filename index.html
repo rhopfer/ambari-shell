@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+        <title>Ambari-shell</title>
+        <link href="./css/sequenceiq.doc.min.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">Ambari-shell</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li class="disabled">
+                    <a rel="next" >
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a rel="prev" >
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#ambari-shell">Ambari Shell</a></li>
+        
+            <li><a href="#architecture">Architecture</a></li>
+        
+            <li><a href="#installation-and-usage">Installation and usage</a></li>
+        
+            <li><a href="#implemented-commands">Implemented Commands</a></li>
+        
+            <li><a href="#summary">Summary</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="ambari-shell">Ambari Shell</h1>
+<p><a href="http://ambari.apache.org/">Ambari</a> is aimed to help provision/manage/monitor Hadoop clusters.
+Although it has a <a href="https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/index.md">REST API</a>
+right now the only way to use ambari is by usingh the web-application.</p>
+<p>Ambari Shell's aim is to provide an interactive command line tool which supports:</p>
+<ul>
+<li>all functionality available through Ambari web-app</li>
+<li>context aware command availability</li>
+<li>tab completion</li>
+<li>required/optional parameter support</li>
+</ul>
+<h2 id="architecture">Architecture</h2>
+<p>To implement ambari-shell the following options were evaluated:</p>
+<ul>
+<li><strong>python</strong>: seems a natural fit as a few components of Ambari are written in python. Also
+  an <a href="https://cwiki.apache.org/confluence/display/AMBARI/Ambari+python+Shell">Ambari python shell</a>
+  was announced on Ambari wiki page, but after a discussion with committers, it turned out
+  to be abandoned path. The official <a href="https://cwiki.apache.org/confluence/display/AMBARI/Ambari+python+Client">Ambari python client</a>
+  hasn't been released, so the python option is eliminated.</li>
+<li><strong>go</strong>: go would solve nicely the usual dependency hell (pip, gem, classpath, you name it), but unfortunately our
+  team has no experience with it.</li>
+<li><strong>java</strong>: The <strong>write-once-run-everywhere</strong> nature provides support for all OS. <a href="http://docs.spring.io/spring-shell/docs/1.0.x/reference/htmlsingle/#preface">Spring-Shell</a>
+  seems a natural fit as a base framework.</li>
+</ul>
+<p>Spring-Shell is also battle tested in various Spring projects including:
+- <a href="http://projects.spring.io/spring-roo/">Spring-Roo</a>: lightweight cli tool to aim Rapid Application Development
+- <a href="http://docs.spring.io/spring-xd/docs/1.0.0.BUILD-SNAPSHOT/reference/html">Spring-XD</a> a user-friendly
+  front end for the REST API of Spring XD. Spring XD is a unified, distributed,
+  service for data ingestion, real time analytics, batch processing, and data export.
+- <a href="https://github.com/spring-projects/rest-shell">Spring-Rest-Shell</a> a command-line shell that aims to make writing REST-based applications easier.
+  Spring Rest-Shell itself would be enough to communicate against Ambari REST API, but we wanted a more
+  Donamin Specific Language (DSL) nature of the command structure.</p>
+<h2 id="installation-and-usage">Installation and usage</h2>
+<p>Ambari-Shell is distributed as a single-file executable jar. So no <code>ClassNotFound</code> should happen. The  <strong>uber jar</strong>
+is generated with the help of spring-boot-maven-plugin available at: <a href="http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar">Spring-Boot</a>.
+Spring-Boot also provides a helper to launch those jars: <a href="http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar-launching">JarLauncher</a>.</p>
+<p>After compiling the project, the shell is ready to use (make sure you use Java 7 or above).</p>
+<pre class="prettyprint well"><code>java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.server=localhost --ambari.port=8080 --ambari.user=admin --ambari.password=admin
+</code></pre>
+
+<p>The <code>--ambari</code> options can be omitted if they are the default values otherwise you only need to specify the difference, e.g just the port is different</p>
+<pre class="prettyprint well"><code>java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.port=49178
+</code></pre>
+
+<pre class="prettyprint well"><code>    _                _                   _  ____   _            _  _
+   / \    _ __ ___  | |__    __ _  _ __ (_)/ ___| | |__    ___ | || |
+  / _ \  | '_ ` _ \ | '_ \  / _` || '__|| |\___ \ | '_ \  / _ \| || |
+ / ___ \ | | | | | || |_) || (_| || |   | | ___) || | | ||  __/| || |
+/_/   \_\|_| |_| |_||_.__/  \__,_||_|   |_||____/ |_| |_| \___||_||_|
+
+Welcome to Ambari Shell. For assistance press tab or use the `hint` command.
+</code></pre>
+
+<h2 id="implemented-commands">Implemented Commands</h2>
+<ul>
+<li><strong>blueprint add</strong> - Add a new blueprint with either --url or --file</li>
+<li><strong>blueprint defaults</strong> - Adds the default blueprints to Ambari</li>
+<li><strong>blueprint list</strong> - Lists all known blueprints</li>
+<li><strong>blueprint show</strong> - Shows the blueprint by its id</li>
+<li><strong>cluster assign</strong> - Assign host to host group</li>
+<li><strong>cluster autoAssign</strong> - Auto assigns host to host groups (based on blueprint cardinality)</li>
+<li><strong>cluster build</strong> - Starts to build a cluster</li>
+<li><strong>cluster create</strong> - Create a cluster based on current blueprint and assigned hosts</li>
+<li><strong>cluster delete</strong> - Delete the cluster</li>
+<li><strong>cluster preview</strong> - Shows the currently assigned hosts</li>
+<li><strong>cluster reset</strong> - Clears the host - host group assignments</li>
+<li><strong>debug off</strong> - Stops showing the URL of the API calls</li>
+<li><strong>debug on</strong> - Shows the URL of the API calls</li>
+<li><strong>exit</strong> - Exits the shell</li>
+<li><strong>hello</strong> - Prints a simple elephant to the console</li>
+<li><strong>help</strong> - List all commands usage</li>
+<li><strong>hint</strong> - Shows some hints</li>
+<li><strong>host components</strong> - Lists the components assigned to the selected host</li>
+<li><strong>host focus</strong> - Sets the useHost to the specified host</li>
+<li><strong>host list</strong> - Lists the available hosts</li>
+<li><strong>quit</strong> - Exits the shell</li>
+<li><strong>script</strong> - Parses the specified resource file and executes its commands</li>
+<li><strong>service components</strong> - Lists all services with their components</li>
+<li><strong>service list</strong> - Lists the available services</li>
+<li><strong>services start</strong> - Starts all the services</li>
+<li><strong>services stop</strong> - Stops all the running services</li>
+<li><strong>tasks</strong> - Lists the Ambari tasks</li>
+<li><strong>version</strong> - Displays shell version</li>
+</ul>
+<p>Please note that all commands are context aware - and are available only when it makes sense.
+For example the <code>cluster create</code> command is not available until a <code>blueprint</code> has not been added or selected.
+A good approach is to use the <code>hint</code> command - as the Ambari UI, this will give you hints about the available commands and the flow of creating or configuring a cluster.</p>
+<p><em>You can always use TAB for completion or available parameters.</em></p>
+<p>Example:</p>
+<p>Once you logged in you can say <code>hello</code>.</p>
+<pre class="prettyprint well"><code>                .-.._
+          __  /`     '.
+       .-'  `/   (   a \
+      /      (    \,_   \
+     /|       '---` |\ =|
+    ` \    /__.-/  /  | |
+       |  / / \ \  \   \_\
+       |__|_|  |_|__\
+</code></pre>
+<p>Initially there are no blueprints available - you cn add blueprints from file or URL. For your convenience we have added 2 blueprints as defaults.
+You can get these blueprints by using the <code>blueprint defaults</code> command. The result is the following:</p>
+<pre class="prettyprint well"><code>  BLUEPRINT              STACK
+  ---------------------  -------
+  multi-node-hdfs-yarn   HDP:2.0
+  single-node-hdfs-yarn  HDP:2.0
+</code></pre>
+
+<p>Once the blueprints are available you can use them to create a cluster. You can use the following command: <code>cluster build --blueprint single-node-hdfs-yarn</code>.
+Now that the blueprint is selected you have to assign the hosts to the available host groups.</p>
+<p>Use <code>cluster assign --hostGroup host_group_1 --host server.ambari.com</code>.</p>
+<p>You can always <code>cluster reset</code> or <code>cluster preview</code> to modify or check the configuration.</p>
+<pre class="prettyprint well"><code>HOSTGROUP     HOST
+  ------------  -----------------
+  host_group_1  server.ambari.com
+</code></pre>
+
+<p>Once you are happy with you can choose <code>cluster create</code> to start building the cluster. Progress can be checked either at Amabri UI or using the <code>tasks</code> command.</p>
+<pre class="prettyprint well"><code>  TASK                        STATUS
+  --------------------------  -------
+  HISTORYSERVER INSTALL       QUEUED
+  ZOOKEEPER_SERVER START      PENDING
+  ZOOKEEPER_CLIENT INSTALL    PENDING
+  HDFS_CLIENT INSTALL         PENDING
+  HISTORYSERVER START         PENDING
+  NODEMANAGER INSTALL         QUEUED
+  NODEMANAGER START           PENDING
+  ZOOKEEPER_SERVER INSTALL    QUEUED
+  YARN_CLIENT INSTALL         PENDING
+  NAMENODE INSTALL            QUEUED
+  RESOURCEMANAGER INSTALL     QUEUED
+  NAMENODE START              PENDING
+  RESOURCEMANAGER START       PENDING
+  DATANODE START              PENDING
+  SECONDARY_NAMENODE START    PENDING
+  DATANODE INSTALL            QUEUED
+  MAPREDUCE2_CLIENT INSTALL   PENDING
+  SECONDARY_NAMENODE INSTALL  QUEUED
+</code></pre>
+
+<h2 id="summary">Summary</h2>
+<p>To sum it up in less than two minutes watch this video:
+https://asciinema.org/a/9783</p>
+<p><a href="http://githalytics.com/sequenceiq/ambari-shell"><img alt="githalytics.com alpha" src="https://cruel-carlota.pagodabox.com/da1aff134f981b790d7870262731514e" title="githalytics.com" /></a></p>
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/prettify-1.0.min.js"></script>
+        <script src="./js/base.js"></script>
+    </body>
+</html>
