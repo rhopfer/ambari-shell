@@ -8,11 +8,9 @@ FULLNAME=$PACKAGE/$ARTIFACT
 
 VERSION=$(curl -Ls $SNAPSHOT_URL/$FULLNAME/maven-metadata.xml|sed -n "s/.*<version>\([^<]*\).*/\1/p" |tail -1)
 
-LATEST=$(curl -Ls $SNAPSHOT_URL/$FULLNAME/$VERSION/maven-metadata.xml|sed -n "/>jar</ {n;s/.*<value>\([^<]*\).*/\1/p;}"|tail -1)
-
 echo latest jar version is $VERSION ...
 echo downloading exetuable jar into $JAR_PATH ...
-curl -o $JAR_PATH $SNAPSHOT_URL/$FULLNAME/$VERSION/$ARTIFACT-$LATEST.jar
+curl -o $JAR_PATH $SNAPSHOT_URL/$FULLNAME/$VERSION/$ARTIFACT-$VERSION.jar
 
 echo To start ambari-shell type:
 echo =========================================
