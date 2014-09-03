@@ -14,7 +14,6 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'maven'
-apply plugin: 'checkstyle'
 apply plugin: 'jacoco'
 apply plugin: 'sonar-runner'
 
@@ -48,16 +47,6 @@ uploadArchives {
             }
         }
     }
-}
-
-checkstyleMain {
-    ignoreFailures = false
-    configProperties = ['config_loc': "$projectDir/config/checkstyle"]
-}
-
-checkstyleTest {
-    ignoreFailures = false
-    configProperties = ['config_loc': "$projectDir/config/checkstyle"]
 }
 
 jacoco {
