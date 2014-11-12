@@ -23,6 +23,7 @@ import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
@@ -38,6 +39,8 @@ import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.completion.Blueprint;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 import com.sequenceiq.ambari.shell.model.Hints;
+
+import groovyx.net.http.HttpResponseException;
 
 /**
  * Blueprint related commands used in the shell.
@@ -133,7 +136,13 @@ public class BlueprintCommands implements CommandMarker {
       } else {
         message = "No blueprint specified";
       }
-    } catch (Exception e) {
+    } catch (HttpResponseException e) {
+        try {
+            message = "Cannot add blueprint: " + IOUtils.toString((StringReader) e.getResponse().getData());
+        } catch (Exception ex) {
+            message = "Cannot add blueprint: " + e.getMessage();
+        }
+    } catch (Exception e){
       message = "Cannot add blueprint: " + e.getMessage();
     }
     return message;
