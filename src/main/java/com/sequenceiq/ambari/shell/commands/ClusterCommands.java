@@ -20,11 +20,13 @@ package com.sequenceiq.ambari.shell.commands;
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderMultiValueMap;
 import static com.sequenceiq.ambari.shell.support.TableRenderer.renderSingleMap;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
@@ -208,7 +210,11 @@ public class ClusterCommands implements CommandMarker {
       flashService.showInstallProgress(exit == null ? false : exit);
     } catch (HttpResponseException e) {
       createNewHostGroups();
-      message = "Failed to create the cluster: " + e.getMessage();
+      try {
+          message = "Failed to create the cluster: " + IOUtils.toString((StringReader) e.getResponse().getData());
+      } catch (Exception ex) {
+          message = "Failed to create the cluster: " + e.getMessage();
+      }
       try {
         deleteCluster(blueprint);
       } catch (HttpResponseException e1) {
