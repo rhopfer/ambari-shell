@@ -17,6 +17,8 @@
  */
 package com.sequenceiq.ambari.shell.customization;
 
+import java.io.IOException;
+
 import org.springframework.shell.plugin.BannerProvider;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +37,12 @@ public class AmbariBanner implements BannerProvider {
 
   @Override
   public String getBanner() {
-    return FigletFont.convertOneLine("AmbariShell");
+    String text = "AmbariShell";
+    try {
+      return FigletFont.convertOneLine(text);
+    } catch (IOException e) {
+      return text;
+    }
   }
 
   @Override
