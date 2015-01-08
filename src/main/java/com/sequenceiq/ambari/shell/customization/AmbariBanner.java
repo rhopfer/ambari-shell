@@ -17,12 +17,11 @@
  */
 package com.sequenceiq.ambari.shell.customization;
 
-import java.io.IOException;
-
 import org.springframework.shell.plugin.BannerProvider;
+import org.springframework.shell.support.util.FileUtils;
 import org.springframework.stereotype.Component;
 
-import com.github.lalyos.jfiglet.FigletFont;
+import com.sequenceiq.ambari.shell.AmbariShell;
 
 /**
  * Prints the banner when the user starts the shell.
@@ -37,12 +36,7 @@ public class AmbariBanner implements BannerProvider {
 
   @Override
   public String getBanner() {
-    String text = "AmbariShell";
-    try {
-      return FigletFont.convertOneLine(text);
-    } catch (IOException e) {
-      return text;
-    }
+    return FileUtils.readBanner(AmbariShell.class, "banner.txt");
   }
 
   @Override
