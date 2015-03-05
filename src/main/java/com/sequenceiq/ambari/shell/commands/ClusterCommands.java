@@ -153,12 +153,16 @@ public class ClusterCommands implements CommandMarker {
    */
   @CliCommand(value = "cluster autoAssign", help = "Automatically assigns hosts to different host groups base on the provided strategy")
   public String autoAssign() throws InvalidHostGroupHostAssociation {
-    Map<String, List<String>> assignments = client.recommendAssignments(context.getFocusValue());
-    if (!assignments.isEmpty()) {
-      hostGroups = assignments;
-      context.setHint(Hints.CREATE_CLUSTER);
-    }
-    return showAssignments();
+      try {
+          Map<String, List<String>> assignments = client.recommendAssignments(context.getFocusValue());
+          if (!assignments.isEmpty()) {
+              hostGroups = assignments;
+              context.setHint(Hints.CREATE_CLUSTER);
+          }
+          return showAssignments();
+      } catch (Exception e) {
+          return "Assigning hosts failed, cause: " + e.getMessage();
+      }
   }
 
   /**
