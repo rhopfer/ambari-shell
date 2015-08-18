@@ -158,6 +158,5 @@ Once you are happy with you can choose `cluster create` to start building the cl
 
 ## Summary
 To sum it up in less than two minutes watch this video:
-<a href="https://asciinema.org/a/14?autoplay=1"><img src="https://asciinema.org/a/9783" width="836"/></a>
 
-
+[![asciicast](https://asciinema.org/a/9783.png)](https://asciinema.org/a/9783)
